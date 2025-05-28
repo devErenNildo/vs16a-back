@@ -6,6 +6,7 @@ import br.com.dbc.vemser.pessoaapi.entity.TipoContato;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 public class ContatoRepository {
     private static List<Contato> listaContatos = new ArrayList<>();
@@ -20,11 +21,28 @@ public class ContatoRepository {
         return listaContatos;
     }
 
+    public List<Contato> getByTypo(TipoContato type) {
+        return listaContatos.stream()
+                .filter(contato -> contato.getTipoContato().equals(type))
+                .collect(Collectors.toList());
+    }
+
     public Contato create(Contato contato) {
         contato.setIdContato(COUNTER.incrementAndGet());
         contato.setNumero(novoNumeroPedido());
         listaContatos.add(contato);
         return contato;
+    }
+
+    public Contato getById(Integer id) throws Exception{
+        return listaContatos.stream()
+                .filter(contato -> contato.getIdContato().equals(id))
+                .findFirst()
+                .orElseThrow(() -> new Exception("Contato não encontrado"));
+    }
+
+    public void delete(Contato contato) {
+        listaContatos.remove(contato);
     }
 
     private Integer novoId() {

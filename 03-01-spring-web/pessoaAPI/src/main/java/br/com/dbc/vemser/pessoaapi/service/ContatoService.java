@@ -2,6 +2,7 @@ package br.com.dbc.vemser.pessoaapi.service;
 
 import br.com.dbc.vemser.pessoaapi.dtos.ContatoRequestDTO;
 import br.com.dbc.vemser.pessoaapi.entity.Contato;
+import br.com.dbc.vemser.pessoaapi.entity.TipoContato;
 import br.com.dbc.vemser.pessoaapi.repository.ContatoRepository;
 
 import java.util.List;
@@ -17,6 +18,10 @@ public class ContatoService {
         return contatoRepository.getAll();
     }
 
+    public List<Contato> getByType(TipoContato type) {
+        return contatoRepository.getByTypo(type);
+    }
+
     public Contato create(ContatoRequestDTO contato) {
         Contato newContato = new Contato();
         newContato.setIdPessoa(contato.getIdPessoa());
@@ -24,4 +29,22 @@ public class ContatoService {
         newContato.setDescricao(contato.getDescricao());
         return contatoRepository.create(newContato);
     }
+
+    public Contato update(Integer idContato,
+                          ContatoRequestDTO contato) throws Exception {
+        Contato contatoRecuperado = contatoRepository.getById(idContato);
+
+        contatoRecuperado.setIdPessoa(contato.getIdPessoa());
+        contatoRecuperado.setTipoContato(contato.getTipoContato());
+        contatoRecuperado.setDescricao(contato.getDescricao());
+
+        return contatoRecuperado;
+    }
+
+    public String delete(Integer idContato) throws Exception {
+        Contato contatoRecuperado = contatoRepository.getById(idContato);
+        contatoRepository.delete(contatoRecuperado);
+        return "Contato removido com sucesso!";
+    }
+
 }

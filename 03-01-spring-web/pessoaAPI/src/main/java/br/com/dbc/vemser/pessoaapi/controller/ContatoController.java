@@ -2,6 +2,7 @@ package br.com.dbc.vemser.pessoaapi.controller;
 
 import br.com.dbc.vemser.pessoaapi.dtos.ContatoRequestDTO;
 import br.com.dbc.vemser.pessoaapi.entity.Contato;
+import br.com.dbc.vemser.pessoaapi.entity.TipoContato;
 import br.com.dbc.vemser.pessoaapi.service.ContatoService;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,8 +22,24 @@ public class ContatoController {
         return contatoService.getAll();
     }
 
+    @GetMapping("/type")
+    public List<Contato> listByType(@RequestParam("type") TipoContato type) {
+        return contatoService.getByType(type);
+    }
+
     @PostMapping
     public Contato create(@RequestBody ContatoRequestDTO contato) {
         return contatoService.create(contato);
+    }
+
+    @PutMapping("/{idContato}")
+    public Contato update(@PathVariable Integer idContato,
+                          @RequestBody ContatoRequestDTO contato) throws Exception {
+        return contatoService.update(idContato, contato);
+    }
+
+    @DeleteMapping("/{idContato}")
+    public String delete(@PathVariable Integer idContato) throws Exception {
+        return contatoService.delete(idContato);
     }
 }
