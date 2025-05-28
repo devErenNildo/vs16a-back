@@ -25,7 +25,7 @@ public class PessoaController {
         return pessoaService.listByName(nome);
     }
 
-    @PostMapping // POST localhost:8080/pessoa
+    @PostMapping
     public Pessoa create(@RequestBody Pessoa pessoa) {
         return pessoaService.create(pessoa);
     }
