@@ -21,9 +21,9 @@ public class ContatoRepository {
         return listaContatos;
     }
 
-    public List<Contato> getByTypo(TipoContato type) {
+    public List<Contato> getByTypo(Integer idPessoa) {
         return listaContatos.stream()
-                .filter(contato -> contato.getTipoContato().equals(type))
+                .filter(contato -> contato.getIdPessoa().equals(idPessoa))
                 .collect(Collectors.toList());
     }
 

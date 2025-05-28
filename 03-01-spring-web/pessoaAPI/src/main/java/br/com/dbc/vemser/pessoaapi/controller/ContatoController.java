@@ -22,9 +22,9 @@ public class ContatoController {
         return contatoService.getAll();
     }
 
-    @GetMapping("/type")
-    public List<Contato> listByType(@RequestParam("type") TipoContato type) {
-        return contatoService.getByType(type);
+    @GetMapping("/pessoa")
+    public List<Contato> listByType(@RequestParam("id") Integer type) {
+        return contatoService.getByIdPessoa(type);
     }
 
     @PostMapping

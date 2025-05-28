@@ -18,7 +18,7 @@ public class ContatoService {
         return contatoRepository.getAll();
     }
 
-    public List<Contato> getByType(TipoContato type) {
+    public List<Contato> getByIdPessoa(Integer type) {
         return contatoRepository.getByTypo(type);
     }
 
