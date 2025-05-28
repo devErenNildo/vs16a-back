@@ -16,6 +16,10 @@ public class ContatoRepository {
         listaContatos.add(new Contato(novoId(), 1, TipoContato.COMERCIAL, novoNumeroPedido(), novoDescricao()));
     }
 
+    public List<Contato> getAll() {
+        return listaContatos;
+    }
+
     public Contato create(Contato contato) {
         contato.setIdContato(COUNTER.incrementAndGet());
         contato.setNumero(novoNumeroPedido());

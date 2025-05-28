@@ -3,10 +3,9 @@ package br.com.dbc.vemser.pessoaapi.controller;
 import br.com.dbc.vemser.pessoaapi.dtos.ContatoRequestDTO;
 import br.com.dbc.vemser.pessoaapi.entity.Contato;
 import br.com.dbc.vemser.pessoaapi.service.ContatoService;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/contato")
@@ -15,6 +14,11 @@ public class ContatoController {
 
     public ContatoController() {
         this.contatoService = new ContatoService();
+    }
+
+    @GetMapping
+    public List<Contato> getAll() {
+        return contatoService.getAll();
     }
 
     @PostMapping
