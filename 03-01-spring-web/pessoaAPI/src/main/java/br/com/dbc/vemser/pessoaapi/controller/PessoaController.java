@@ -11,8 +11,8 @@ import java.util.List;
 public class PessoaController {
     private PessoaService pessoaService;
 
-    public PessoaController() {
-        pessoaService = new PessoaService();
+    public PessoaController(PessoaService pessoaService) {
+        this.pessoaService = pessoaService;
     }
 
     @GetMapping

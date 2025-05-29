@@ -13,8 +13,8 @@ import java.util.List;
 public class ContatoController {
     private ContatoService contatoService;
 
-    public ContatoController() {
-        this.contatoService = new ContatoService();
+    public ContatoController(ContatoService contatoService) {
+        this.contatoService = contatoService;
     }
 
     @GetMapping
