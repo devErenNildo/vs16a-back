@@ -11,9 +11,14 @@ import java.util.List;
 @Service
 public class ContatoService {
     private ContatoRepository contatoRepository;
+    private PessoaService pessoaService;
 
-    public ContatoService(ContatoRepository contatoRepository) {
+    public ContatoService(
+            ContatoRepository contatoRepository,
+            PessoaService pessoaService
+    ) {
         this.contatoRepository = contatoRepository;
+        this.pessoaService = pessoaService;
     }
 
     public List<Contato> getAll() {
@@ -24,7 +29,9 @@ public class ContatoService {
         return contatoRepository.getByTypo(type);
     }
 
-    public Contato create(ContatoRequestDTO contato) {
+    public Contato create(ContatoRequestDTO contato) throws Exception{
+        pessoaService.validarPessoa(contato.getIdPessoa());
+
         Contato newContato = new Contato();
         newContato.setIdPessoa(contato.getIdPessoa());
         newContato.setTipoContato(contato.getTipoContato());
@@ -32,8 +39,11 @@ public class ContatoService {
         return contatoRepository.create(newContato);
     }
 
-    public Contato update(Integer idContato,
-                          ContatoRequestDTO contato) throws Exception {
+    public Contato update(
+            Integer idContato,
+            ContatoRequestDTO contato
+    ) throws Exception {
+        pessoaService.validarPessoa(contato.getIdPessoa());
         Contato contatoRecuperado = contatoRepository.getById(idContato);
 
         contatoRecuperado.setIdPessoa(contato.getIdPessoa());

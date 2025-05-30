@@ -44,6 +44,10 @@ public class PessoaService {
         return pessoaRepository.listByName(nome);
     }
 
+    public void validarPessoa(Integer id) throws Exception {
+        getPessoa(id);
+    }
+
     private Pessoa getPessoa(Integer id) throws Exception {
         Pessoa pessoaRecuperada = pessoaRepository.list().stream()
                 .filter(pessoa -> pessoa.getIdPessoa().equals(id))

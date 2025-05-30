@@ -4,6 +4,7 @@ import br.com.dbc.vemser.pessoaapi.dtos.ContatoRequestDTO;
 import br.com.dbc.vemser.pessoaapi.entity.Contato;
 import br.com.dbc.vemser.pessoaapi.entity.TipoContato;
 import br.com.dbc.vemser.pessoaapi.service.ContatoService;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -28,13 +29,15 @@ public class ContatoController {
     }
 
     @PostMapping
-    public Contato create(@RequestBody ContatoRequestDTO contato) {
+    public Contato create(@RequestBody @Valid ContatoRequestDTO contato) throws Exception {
         return contatoService.create(contato);
     }
 
     @PutMapping("/{idContato}")
-    public Contato update(@PathVariable Integer idContato,
-                          @RequestBody ContatoRequestDTO contato) throws Exception {
+    public Contato update(
+            @PathVariable Integer idContato,
+            @RequestBody @Valid ContatoRequestDTO contato
+    ) throws Exception {
         return contatoService.update(idContato, contato);
     }
 

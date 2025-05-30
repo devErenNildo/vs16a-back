@@ -9,9 +9,14 @@ import java.util.List;
 @Service
 public class EnderecoService {
     private final EnderecoRepository enderecoRepository;
+    private final PessoaService pessoaService;
 
-    public EnderecoService(EnderecoRepository enderecoRepository) {
+    public EnderecoService(
+            EnderecoRepository enderecoRepository,
+            PessoaService pessoaService
+    ) {
         this.enderecoRepository = enderecoRepository;
+        this.pessoaService = pessoaService;
     }
 
     public List<Endereco> getAll() {
@@ -26,13 +31,15 @@ public class EnderecoService {
         return enderecoRepository.getByIdPessoa(idPessoa);
     }
 
-    public Endereco create(Integer idPessoa, Endereco endereco) {
+    public Endereco create(Integer idPessoa, Endereco endereco) throws Exception {
+        pessoaService.validarPessoa(idPessoa);
         endereco.setIdPessoa(idPessoa);
         return enderecoRepository.create(endereco);
     }
 
-    public Endereco update(Integer idEndereco, Endereco endereco) throws Exception {
-        return enderecoRepository.update(idEndereco, endereco);
+    public Endereco update(Integer idPessoa, Endereco endereco) throws Exception {
+        pessoaService.validarPessoa(idPessoa);
+        return enderecoRepository.update(idPessoa, endereco);
     }
 
     public String delete(Integer idEndereco) throws Exception {

@@ -1,15 +1,38 @@
 package br.com.dbc.vemser.pessoaapi.entity;
 
+import jakarta.validation.constraints.*;
+
 public class Endereco {
     private Integer idEndereco;
+
+    @NotNull(message = "ID da pessoa não pode ser nulo")
     private Integer idPessoa;
+
+    @NotNull(message = "Tipo de endereço não pode ser nulo")
     private TipoEndereco tipo;
+
+    @NotBlank(message = "Logradouro não pode ser nulo nem vazio")
+    @Size(max = 250, message = "Logradouro deve conter no máximo 250 caracteres")
     private String logradouro;
+
+    @NotNull(message = "Número não pode ser nulo")
     private Integer numero;
+
+    @Size(max = 250, message = "Complemento deve conter no máximo 250 caracteres")
     private String complemento;
+
+    @NotBlank(message = "CEP não pode ser nulo nem vazio")
+    @Size(max = 8, message = "CEP deve conter no máximo 8 caracteres")
     private String cep;
+
+    @NotBlank(message = "Cidade não pode ser nula nem vazia")
+    @Size(max = 250, message = "Cidade deve conter no máximo 250 caracteres")
     private String cidade;
+
+    @NotNull(message = "Estado não pode ser nulo")
     private String estado;
+
+    @NotNull(message = "País não pode ser nulo")
     private String pais;
 
     public Integer getIdEndereco() {
