@@ -1,5 +1,6 @@
 package br.com.dbc.vemser.pessoaapi.controller;
 
+import br.com.dbc.vemser.pessoaapi.dtos.EnderecoDTO;
 import br.com.dbc.vemser.pessoaapi.entity.Endereco;
 import br.com.dbc.vemser.pessoaapi.service.EnderecoService;
 import jakarta.validation.Valid;
@@ -34,9 +35,21 @@ public class EnderecoController {
     @PostMapping("/{idPessoa}")
     public Endereco create(
             @PathVariable Integer idPessoa,
-            @RequestBody @Valid Endereco endereco
+            @RequestBody @Valid EnderecoDTO endereco
     ) throws Exception {
-        return enderecoService.create(idPessoa, endereco);
+        Endereco novoEndereco = new Endereco();
+
+        novoEndereco.setIdPessoa(idPessoa);
+        novoEndereco.setTipo(endereco.getTipo());
+        novoEndereco.setLogradouro(endereco.getLogradouro());
+        novoEndereco.setNumero(endereco.getNumero());
+        novoEndereco.setComplemento(endereco.getComplemento());
+        novoEndereco.setCep(endereco.getCep());
+        novoEndereco.setCidade(endereco.getCidade());
+        novoEndereco.setEstado(endereco.getEstado());
+        novoEndereco.setPais(endereco.getPais());
+
+        return enderecoService.create(idPessoa, novoEndereco);
     }
 
     @PutMapping("/{idEndereco}")
