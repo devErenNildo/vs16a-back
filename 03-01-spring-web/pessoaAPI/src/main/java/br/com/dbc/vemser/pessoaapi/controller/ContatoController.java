@@ -15,7 +15,7 @@ import java.util.List;
 @RequestMapping("/contato")
 @RequiredArgsConstructor
 public class ContatoController {
-    private ContatoService contatoService;
+    private final ContatoService contatoService;
 
     @GetMapping
     public ResponseEntity<List<ContatoResponseDTO>> getAll() {

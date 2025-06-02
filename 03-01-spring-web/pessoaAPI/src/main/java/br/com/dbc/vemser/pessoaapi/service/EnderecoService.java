@@ -1,45 +1,62 @@
 package br.com.dbc.vemser.pessoaapi.service;
 
+import br.com.dbc.vemser.pessoaapi.dtos.EnderecoRequestDTO;
+import br.com.dbc.vemser.pessoaapi.dtos.EnderecoResponseDTO;
 import br.com.dbc.vemser.pessoaapi.entity.Endereco;
 import br.com.dbc.vemser.pessoaapi.repository.EnderecoRepository;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class EnderecoService {
     private final EnderecoRepository enderecoRepository;
     private final PessoaService pessoaService;
+    private final ObjectMapper objectMapper;
 
-    public EnderecoService(
-            EnderecoRepository enderecoRepository,
-            PessoaService pessoaService
-    ) {
-        this.enderecoRepository = enderecoRepository;
-        this.pessoaService = pessoaService;
+    public List<EnderecoResponseDTO> getAll() {
+
+        List<Endereco> enderecos = enderecoRepository.getAll();
+
+        return objectMapper.convertValue(
+          enderecos,
+          objectMapper.getTypeFactory().constructCollectionType(List.class, EnderecoResponseDTO.class)
+        );
     }
 
-    public List<Endereco> getAll() {
-        return enderecoRepository.getAll();
+    public EnderecoResponseDTO getById(Integer idEndereco) throws Exception {
+        Endereco endereco = enderecoRepository.getById(idEndereco);
+        return objectMapper.convertValue(endereco, EnderecoResponseDTO.class);
     }
 
-    public Endereco getById(Integer idEndereco) throws Exception {
-        return enderecoRepository.getById(idEndereco);
+    public List<EnderecoResponseDTO> getByIdPessoa(Integer idPessoa) {
+        List<Endereco> enderecos = enderecoRepository.getByIdPessoa(idPessoa);
+
+        return objectMapper.convertValue(
+                enderecos,
+                objectMapper.getTypeFactory().constructCollectionType(List.class, EnderecoResponseDTO.class)
+        );
     }
 
-    public List<Endereco> getByIdPessoa(Integer idPessoa) {
-        return enderecoRepository.getByIdPessoa(idPessoa);
-    }
-
-    public Endereco create(Integer idPessoa, Endereco endereco) throws Exception {
+    public EnderecoResponseDTO create(Integer idPessoa, EnderecoRequestDTO endereco) throws Exception {
         pessoaService.validarPessoa(idPessoa);
-        endereco.setIdPessoa(idPessoa);
-        return enderecoRepository.create(endereco);
+        Endereco newEndereco = objectMapper.convertValue(endereco, Endereco.class);
+        newEndereco.setIdPessoa(idPessoa);
+        newEndereco = enderecoRepository.create(newEndereco);
+
+        return objectMapper.convertValue(newEndereco, EnderecoResponseDTO.class);
     }
 
-    public Endereco update(Integer idPessoa, Endereco endereco) throws Exception {
+    public EnderecoResponseDTO update(Integer idPessoa, EnderecoRequestDTO endereco) throws Exception {
         pessoaService.validarPessoa(idPessoa);
-        return enderecoRepository.update(idPessoa, endereco);
+
+        Endereco newEndereco = objectMapper.convertValue(endereco, Endereco.class);
+        Endereco enderecocUpdate = enderecoRepository.update(idPessoa, newEndereco);
+
+        return objectMapper.convertValue(enderecocUpdate, EnderecoResponseDTO.class);
     }
 
     public String delete(Integer idEndereco) throws Exception {
