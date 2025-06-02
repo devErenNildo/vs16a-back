@@ -1,38 +1,49 @@
 package br.com.dbc.vemser.pessoaapi.service;
 
+import br.com.dbc.vemser.pessoaapi.dtos.EnderecoResponseDTO;
+import br.com.dbc.vemser.pessoaapi.dtos.PessoaRequestDTO;
+import br.com.dbc.vemser.pessoaapi.dtos.PessoaResponseDTO;
 import br.com.dbc.vemser.pessoaapi.entity.Pessoa;
 import br.com.dbc.vemser.pessoaapi.repository.PessoaRepository;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class PessoaService {
-    private PessoaRepository pessoaRepository;
+    private final PessoaRepository pessoaRepository;
+    private final ObjectMapper objectMapper;
 
-    public PessoaService(PessoaRepository pessoaRepository) {
-        this.pessoaRepository = pessoaRepository;
+    public PessoaResponseDTO create(PessoaRequestDTO pessoa){
+        Pessoa newPessoa = objectMapper.convertValue(pessoa, Pessoa.class);
+        newPessoa = pessoaRepository.create(newPessoa);
+
+        return objectMapper.convertValue(newPessoa, PessoaResponseDTO.class);
     }
 
-    public Pessoa create(Pessoa pessoa){
+    public List<PessoaResponseDTO> list(){
+        List<Pessoa> pessoas = pessoaRepository.list();
 
-
-        return pessoaRepository.create(pessoa);
+        return objectMapper.convertValue(
+                pessoas,
+                objectMapper.getTypeFactory().constructCollectionType(List.class, PessoaResponseDTO.class)
+        );
     }
 
-    public List<Pessoa> list(){
-        return pessoaRepository.list();
-    }
-
-    public Pessoa update(Integer id,
-                         Pessoa pessoaAtualizar) throws Exception {
+    public PessoaResponseDTO update(
+            Integer id,
+            PessoaRequestDTO pessoaAtualizar
+    ) throws Exception {
         Pessoa pessoaRecuperada = getPessoa(id);
 
         pessoaRecuperada.setCpf(pessoaAtualizar.getCpf());
         pessoaRecuperada.setNome(pessoaAtualizar.getNome());
         pessoaRecuperada.setDataNascimento(pessoaAtualizar.getDataNascimento());
 
-        return pessoaRecuperada;
+        return objectMapper.convertValue(pessoaRecuperada, PessoaResponseDTO.class);
     }
 
     public void delete(Integer id) throws Exception {
@@ -40,8 +51,13 @@ public class PessoaService {
         pessoaRepository.delete(pessoaRecuperada);
     }
 
-    public List<Pessoa> listByName(String nome) {
-        return pessoaRepository.listByName(nome);
+    public List<PessoaResponseDTO> listByName(String nome) {
+        List<Pessoa> pessoas =  pessoaRepository.listByName(nome);
+
+        return objectMapper.convertValue(
+                pessoas,
+                objectMapper.getTypeFactory().constructCollectionType(List.class, PessoaResponseDTO.class)
+        );
     }
 
     public void validarPessoa(Integer id) throws Exception {
