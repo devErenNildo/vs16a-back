@@ -3,13 +3,11 @@ package br.com.dbc.vemser.pessoaapi.service;
 import br.com.dbc.vemser.pessoaapi.dtos.ContatoRequestDTO;
 import br.com.dbc.vemser.pessoaapi.dtos.ContatoResponseDTO;
 import br.com.dbc.vemser.pessoaapi.entity.Contato;
-import br.com.dbc.vemser.pessoaapi.entity.TipoContato;
 import br.com.dbc.vemser.pessoaapi.repository.ContatoRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -38,17 +36,17 @@ public class ContatoService {
         );
     }
 
-    public Contato create(ContatoRequestDTO contato) throws Exception{
+    public ContatoResponseDTO create(ContatoRequestDTO contato) throws Exception{
         pessoaService.validarPessoa(contato.getIdPessoa());
 
-        Contato newContato = new Contato();
-        newContato.setIdPessoa(contato.getIdPessoa());
-        newContato.setTipoContato(contato.getTipoContato());
-        newContato.setDescricao(contato.getDescricao());
-        return contatoRepository.create(newContato);
+        Contato newContato = objectMapper.convertValue(contato, Contato.class);
+
+        newContato = contatoRepository.create(newContato);
+
+        return objectMapper.convertValue(newContato, ContatoResponseDTO.class);
     }
 
-    public Contato update(
+    public ContatoResponseDTO update(
             Integer idContato,
             ContatoRequestDTO contato
     ) throws Exception {
@@ -59,7 +57,7 @@ public class ContatoService {
         contatoRecuperado.setTipoContato(contato.getTipoContato());
         contatoRecuperado.setDescricao(contato.getDescricao());
 
-        return contatoRecuperado;
+        return objectMapper.convertValue(contatoRecuperado, ContatoResponseDTO.class);
     }
 
     public String delete(Integer idContato) throws Exception {
