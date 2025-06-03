@@ -17,14 +17,16 @@ public class PessoaService {
     private final PessoaRepository pessoaRepository;
     private final ObjectMapper objectMapper;
     private final EmailService emailService;
+//    private final EmailService emailService;
 
     public PessoaResponseDTO create(PessoaRequestDTO pessoa){
         Pessoa newPessoa = objectMapper.convertValue(pessoa, Pessoa.class);
         newPessoa = pessoaRepository.create(newPessoa);
 
 
-        emailService.enviarEmailBoasVindas(pessoa.getEmail(), pessoa.getNome(), newPessoa.getIdPessoa());
+//        emailService.enviarEmailBoasVindas(pessoa.getEmail(), pessoa.getNome(), newPessoa.getIdPessoa());
 
+        emailService.sendEmail(pessoa.getEmail(), pessoa.getNome(), newPessoa.getIdPessoa());
         return objectMapper.convertValue(newPessoa, PessoaResponseDTO.class);
     }
 

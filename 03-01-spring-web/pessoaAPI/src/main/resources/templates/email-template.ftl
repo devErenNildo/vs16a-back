@@ -47,7 +47,7 @@
 <body>
 <div class="container">
     <div class="header">
-        <h2>Bem-vindo ao nosso sistema!</h2>
+        <h2>Bem-vindo ao Pessoa API!</h2>
     </div>
     <div class="content">
         <p>Olá <span class="highlight">${nome}</span>,</p>
