@@ -17,11 +17,11 @@ public class PessoaRepository {
 
     public PessoaRepository() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        listaPessoas.add(new Pessoa(COUNTER.incrementAndGet() /*1*/, "Maicon Gerardi", LocalDate.parse("10/10/1990", formatter), "12345678910"));
-        listaPessoas.add(new Pessoa(COUNTER.incrementAndGet() /*2*/, "Charles Pereira", LocalDate.parse("08/05/1985", formatter), "12345678911"));
-        listaPessoas.add(new Pessoa(COUNTER.incrementAndGet() /*3*/, "Marina Oliveira", LocalDate.parse("30/03/1970", formatter), "12345678912"));
-        listaPessoas.add(new Pessoa(COUNTER.incrementAndGet() /*4*/, "Rafael Lazzari", LocalDate.parse("01/07/1990", formatter), "12345678916"));
-        listaPessoas.add(new Pessoa(COUNTER.incrementAndGet() /*5*/, "Ana", LocalDate.parse("01/07/1990", formatter), "12345678917"));
+        listaPessoas.add(new Pessoa(COUNTER.incrementAndGet() /*1*/, "Maicon Gerardi", "email@teste.com", LocalDate.parse("10/10/1990", formatter), "12345678910"));
+        listaPessoas.add(new Pessoa(COUNTER.incrementAndGet() /*2*/, "Charles Pereira", "email@teste.com", LocalDate.parse("08/05/1985", formatter), "12345678911"));
+        listaPessoas.add(new Pessoa(COUNTER.incrementAndGet() /*3*/, "Marina Oliveira", "email@teste.com", LocalDate.parse("30/03/1970", formatter), "12345678912"));
+        listaPessoas.add(new Pessoa(COUNTER.incrementAndGet() /*4*/, "Rafael Lazzari", "email@teste.com", LocalDate.parse("01/07/1990", formatter), "12345678916"));
+        listaPessoas.add(new Pessoa(COUNTER.incrementAndGet() /*5*/, "Ana", "email@teste.com", LocalDate.parse("01/07/1990", formatter), "12345678917"));
     }
 
     public Pessoa create(Pessoa pessoa) {
