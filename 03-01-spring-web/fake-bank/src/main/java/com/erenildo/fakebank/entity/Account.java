@@ -21,6 +21,9 @@ public class Account {
     @Column(unique = true, nullable = false)
     private String numeroAgencia;
 
+    @Column(unique = true)
+    private String chavePix;
+
     @Column(nullable = false)
     private BigDecimal saldo;
 
