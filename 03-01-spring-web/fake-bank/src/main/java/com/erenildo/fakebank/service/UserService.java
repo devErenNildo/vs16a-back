@@ -2,7 +2,7 @@ package com.erenildo.fakebank.service;
 
 import com.erenildo.fakebank.dtos.ConfirmAccountResponseDTO;
 import com.erenildo.fakebank.dtos.CreateAccountResponseDTO;
-import com.erenildo.fakebank.dtos.UserRequestDTO;
+import com.erenildo.fakebank.dtos.UserCreateAccountDTO;
 import com.erenildo.fakebank.entity.TokenConfirmation;
 import com.erenildo.fakebank.entity.User;
 import com.erenildo.fakebank.exception.EmailCadastradoException;
@@ -14,7 +14,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.Random;
 import java.util.UUID;
 
 @Service
@@ -27,7 +26,7 @@ public class UserService {
     private final TokenConfirmationService tokenConfirmationService;
     private final ObjectMapper objectMapper;
 
-    public CreateAccountResponseDTO registerUser(UserRequestDTO dto) {
+    public CreateAccountResponseDTO registerUser(UserCreateAccountDTO dto) {
         if (userRepository.existsByEmail(dto.getEmail())){
             User userExistente = userRepository.findByEmail(dto.getEmail());
             if(!userExistente.getContaConfirmada()) {
