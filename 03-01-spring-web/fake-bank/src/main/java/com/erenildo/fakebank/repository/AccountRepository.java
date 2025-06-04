@@ -12,4 +12,6 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
     Optional<Account> findByUsuarioId(String usuarioId);
 
     Optional<Account> findByChavePix(String chavePix);
+
+    boolean existsByChavePix(String pix);
 }

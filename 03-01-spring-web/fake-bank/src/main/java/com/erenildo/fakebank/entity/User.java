@@ -17,9 +17,6 @@ public class User {
     @Column(nullable = false, unique = true)
     private String email;
 
-    @Column(unique = true)
-    private String chavePix;
-
     @Column(nullable = false, unique = true, length = 11)
     private String cpf;
 

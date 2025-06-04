@@ -1,7 +1,10 @@
 package com.erenildo.fakebank.service;
 
+import com.erenildo.fakebank.dtos.CadastrarPixRequestDTO;
+import com.erenildo.fakebank.dtos.MsgResponseDefaltDTO;
 import com.erenildo.fakebank.entity.Account;
 import com.erenildo.fakebank.entity.Transaction;
+import com.erenildo.fakebank.entity.User;
 import com.erenildo.fakebank.repository.AccountRepository;
 import com.erenildo.fakebank.repository.TrasactionRepository;
 import jakarta.transaction.Transactional;
@@ -48,5 +51,33 @@ public class PixService {
 
         trasactionRepository.save(transacao);
 
+    }
+
+    public MsgResponseDefaltDTO cadastrarPix(CadastrarPixRequestDTO dto) {
+        Account conta = accountRepository.findByUsuarioId(dto.getIdUsuario())
+                .orElseThrow(() -> new RuntimeException("Conta não encontrada."));
+
+        if (conta.getChavePix() != null ) {
+            throw new RuntimeException("Essa conta já possui uma chave PIX.");
+        }
+
+        if ( accountRepository.existsByChavePix(dto.getChavePix()) ) {
+            throw new RuntimeException("Essa chave PIX já está em uso por outra conta.");
+        }
+
+        User usuario = conta.getUsuario();
+
+        boolean chaveValida = dto.getChavePix().equalsIgnoreCase(usuario.getEmail())
+                || dto.getChavePix().equals(usuario.getCpf())
+                || dto.getChavePix().equals(usuario.getCelular());
+
+        if (!chaveValida) {
+            throw new RuntimeException("A chave PIX deve ser seu email, CPF ou celular.");
+        }
+
+        conta.setChavePix(dto.getChavePix());
+        accountRepository.save(conta);
+
+        return new MsgResponseDefaltDTO("Chave pix: " + dto.getChavePix() + " cadastrada com sucesso.");
     }
 }
