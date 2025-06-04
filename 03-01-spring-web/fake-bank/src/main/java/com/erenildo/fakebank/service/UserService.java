@@ -11,6 +11,7 @@ import com.erenildo.fakebank.repository.UserRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -25,6 +26,7 @@ public class UserService {
     private final AccountService accountService;
     private final TokenConfirmationService tokenConfirmationService;
     private final ObjectMapper objectMapper;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     public CreateAccountResponseDTO registerUser(UserCreateAccountDTO dto) {
         if (userRepository.existsByEmail(dto.getEmail())){
@@ -38,6 +40,7 @@ public class UserService {
         User user = objectMapper.convertValue(dto, User.class);
         user.setContaConfirmada(false);
         user.setId(UUID.randomUUID().toString().replace("-", ""));
+        user.setSenha(bCryptPasswordEncoder.encode(user.getSenha()));
 
         userRepository.save(user);
 

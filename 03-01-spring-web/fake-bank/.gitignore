@@ -19,6 +19,10 @@ target/
 *.iml
 *.ipr
 
+### key rsa ###
+/src/main/resources/app.key
+/src/main/resources/app.pub
+
 ### NetBeans ###
 /nbproject/private/
 /nbbuild/
