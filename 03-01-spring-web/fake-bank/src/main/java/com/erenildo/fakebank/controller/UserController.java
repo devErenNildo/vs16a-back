@@ -1,11 +1,9 @@
 package com.erenildo.fakebank.controller;
 
-import com.erenildo.fakebank.dtos.ConfirmAccountRequestDTO;
-import com.erenildo.fakebank.dtos.ConfirmAccountResponseDTO;
-import com.erenildo.fakebank.dtos.CreateAccountResponseDTO;
-import com.erenildo.fakebank.dtos.UserRequestDTO;
+import com.erenildo.fakebank.dtos.*;
 import com.erenildo.fakebank.service.TokenConfirmationService;
 import com.erenildo.fakebank.service.UserService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,17 +20,17 @@ public class UserController {
     private final TokenConfirmationService tokenConfirmationService;
 
     @PostMapping("/create")
-    public ResponseEntity<CreateAccountResponseDTO> createAccount (@RequestBody UserRequestDTO dto) {
+    public ResponseEntity<CreateAccountResponseDTO> createAccount (@RequestBody @Valid UserCreateAccountDTO dto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(userService.registerUser(dto));
     }
 
     @PostMapping("/confirm_account")
-    public ResponseEntity<ConfirmAccountResponseDTO> confirmAccount (@RequestBody ConfirmAccountRequestDTO dto) {
+    public ResponseEntity<ConfirmAccountResponseDTO> confirmAccount (@RequestBody @Valid ConfirmAccountRequestDTO dto) {
         return  ResponseEntity.status(HttpStatus.CREATED).body(userService.confirmUser(dto.getEmail(), dto.getToken()));
     }
 
     @PostMapping("/resend-token")
-    public ResponseEntity<CreateAccountResponseDTO> resendToken (@RequestBody String email) {
+    public ResponseEntity<CreateAccountResponseDTO> resendToken (@RequestBody @Valid ResendTokenRequestDTO email) {
         tokenConfirmationService.reenviarToken(email);
         return ResponseEntity.ok(new CreateAccountResponseDTO("Token reenviado com sucesso"));
     }
