@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Validated
+
 @RestController
 @RequestMapping("/pessoa")
 @RequiredArgsConstructor
@@ -40,7 +40,6 @@ public class PessoaController implements PessoaControllerDocs {
 
     @PutMapping("/{idPessoa}")
     public ResponseEntity<PessoaResponseDTO> update(
-            @NotNull(message = "ID da pessoa não pode ser nulo")
             @PathVariable("idPessoa") Integer id,
             @RequestBody @Valid PessoaRequestDTO pessoaAtualizar
     ) throws Exception {
@@ -48,7 +47,7 @@ public class PessoaController implements PessoaControllerDocs {
     }
 
     @DeleteMapping("/{idPessoa}")
-    public void delete(@NotNull(message = "ID da pessoa não pode ser nulo") @PathVariable("idPessoa") Integer id) throws Exception {
+    public void delete(@PathVariable("idPessoa") Integer id) throws Exception {
         pessoaService.delete(id);
     }
 }
