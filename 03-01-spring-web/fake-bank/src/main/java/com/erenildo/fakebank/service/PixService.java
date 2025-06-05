@@ -45,8 +45,11 @@ public class PixService {
             throw new RegraDeNegocioRuntimeExpeptions("Saldo insuficiente.");
         }
 
+        BigDecimal taxa = dto.getValor().multiply(BigDecimal.valueOf(0.15));
+        BigDecimal valorLiquido = dto.getValor().subtract(taxa);
+
         origem.setSaldo(origem.getSaldo().subtract(dto.getValor()));
-        destino.setSaldo(destino.getSaldo().add(dto.getValor()));
+        destino.setSaldo(destino.getSaldo().add(valorLiquido));
         accountRepository.save(origem);
         accountRepository.save(destino);
 
