@@ -7,6 +7,7 @@ import com.erenildo.fakebank.dtos.TransacaoResponseDTO;
 import com.erenildo.fakebank.entity.Account;
 import com.erenildo.fakebank.entity.Transaction;
 import com.erenildo.fakebank.entity.User;
+import com.erenildo.fakebank.exception.RegraDeNegocioRuntimeExpeptions;
 import com.erenildo.fakebank.repository.AccountRepository;
 import com.erenildo.fakebank.repository.TrasactionRepository;
 import com.erenildo.fakebank.security.TokenUtil;
@@ -31,17 +32,17 @@ public class PixService {
         String idUsuarioOrigem = tokenUtil.getUserIdFromToken();
 
         Account origem = accountRepository.findByUsuarioId(idUsuarioOrigem)
-                .orElseThrow(() -> new RuntimeException("Conta origem não encontrada."));
+                .orElseThrow(() -> new RegraDeNegocioRuntimeExpeptions("Conta origem não encontrada."));
 
         Account destino = accountRepository.findByChavePix(dto.getPixDestinatario())
-                .orElseThrow(() -> new RuntimeException("Chave pix não encontrada ou inexistente."));
+                .orElseThrow(() -> new RegraDeNegocioRuntimeExpeptions("Chave pix não encontrada ou inexistente."));
 
         if (origem.getId().equals(destino.getId())) {
-            throw new RuntimeException("Não é possível transferir para a mesma conta.");
+            throw new RegraDeNegocioRuntimeExpeptions("Não é possível transferir para a mesma conta.");
         }
 
         if (origem.getSaldo().compareTo(dto.getValor()) < 0) {
-            throw new RuntimeException("Saldo insuficiente.");
+            throw new RegraDeNegocioRuntimeExpeptions("Saldo insuficiente.");
         }
 
         origem.setSaldo(origem.getSaldo().subtract(dto.getValor()));
@@ -66,14 +67,14 @@ public class PixService {
         String idUsuarioOrigem = tokenUtil.getUserIdFromToken();
 
         Account conta = accountRepository.findByUsuarioId(idUsuarioOrigem)
-                .orElseThrow(() -> new RuntimeException("Conta não encontrada."));
+                .orElseThrow(() -> new RegraDeNegocioRuntimeExpeptions("Conta não encontrada."));
 
         if (conta.getChavePix() != null ) {
-            throw new RuntimeException("Essa conta já possui uma chave PIX.");
+            throw new RegraDeNegocioRuntimeExpeptions("Essa conta já possui uma chave PIX.");
         }
 
         if ( accountRepository.existsByChavePix(dto.getChavePix()) ) {
-            throw new RuntimeException("Essa chave PIX já está em uso por outra conta.");
+            throw new RegraDeNegocioRuntimeExpeptions("Essa chave PIX já está em uso por outra conta.");
         }
 
         User usuario = conta.getUsuario();
@@ -83,7 +84,7 @@ public class PixService {
                 || dto.getChavePix().equals(usuario.getCelular());
 
         if (!chaveValida) {
-            throw new RuntimeException("A chave PIX deve ser seu email, CPF ou celular.");
+            throw new RegraDeNegocioRuntimeExpeptions("A chave PIX deve ser seu email, CPF ou celular.");
         }
 
         conta.setChavePix(dto.getChavePix());
