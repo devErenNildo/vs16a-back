@@ -7,6 +7,7 @@ import com.erenildo.fakebank.entity.Role;
 import com.erenildo.fakebank.entity.TokenConfirmation;
 import com.erenildo.fakebank.entity.User;
 import com.erenildo.fakebank.exception.EmailCadastradoException;
+import com.erenildo.fakebank.exception.RegraDeNegocioRuntimeExpeptions;
 import com.erenildo.fakebank.repository.RoleRepository;
 import com.erenildo.fakebank.repository.TokenConfirmationRepository;
 import com.erenildo.fakebank.repository.UserRepository;
@@ -38,7 +39,7 @@ public class UserService {
         if (userRepository.existsByEmail(dto.getEmail())){
             User userExistente = userRepository.findByEmail(dto.getEmail());
             if(!userExistente.getContaConfirmada()) {
-                throw new RuntimeException("Usuário já tem um cadastro esperando confirmação. Solicite um novo token de confirmação ");
+                throw new RegraDeNegocioRuntimeExpeptions("Usuário já tem um cadastro esperando confirmação. Solicite um novo token de confirmação ");
             }
             throw new EmailCadastradoException(dto.getEmail());
         }
@@ -61,13 +62,13 @@ public class UserService {
     @Transactional
     public ConfirmAccountResponseDTO confirmUser(String email, String token) {
         TokenConfirmation tokenExistente = tokenConfirmationRepository.findByUserEmail(email)
-                .orElseThrow(() -> new RuntimeException("Esse email não possui um token de confirmação"));
+                .orElseThrow(() -> new RegraDeNegocioRuntimeExpeptions("Esse email não possui um token de confirmação"));
 
         if (tokenExistente.getExpiracao().isBefore(LocalDateTime.now()))
-            throw new RuntimeException("O código expirou. Solicite um novo.");
+            throw new RegraDeNegocioRuntimeExpeptions("O código expirou. Solicite um novo.");
 
         if (!tokenExistente.getCodigo().equals(token))
-            throw new RuntimeException("Código inválido.");
+            throw new RegraDeNegocioRuntimeExpeptions("Código inválido.");
 
         User user = tokenExistente.getUser();
         user.setContaConfirmada(true);

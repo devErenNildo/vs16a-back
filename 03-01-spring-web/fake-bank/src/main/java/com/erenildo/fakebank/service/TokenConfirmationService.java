@@ -3,6 +3,7 @@ package com.erenildo.fakebank.service;
 import com.erenildo.fakebank.dtos.ResendTokenRequestDTO;
 import com.erenildo.fakebank.entity.TokenConfirmation;
 import com.erenildo.fakebank.entity.User;
+import com.erenildo.fakebank.exception.RegraDeNegocioRuntimeExpeptions;
 import com.erenildo.fakebank.repository.TokenConfirmationRepository;
 import com.erenildo.fakebank.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -34,12 +35,12 @@ public class TokenConfirmationService {
 
     public void reenviarToken (ResendTokenRequestDTO email) {
         if (!userRepository.existsByEmail(email.getEmail()))
-            throw new RuntimeException("Email não encontrado.");
+            throw new RegraDeNegocioRuntimeExpeptions("Email não encontrado.");
 
         User userEncontrado = userRepository.findByEmail(email.getEmail());
 
         if (userEncontrado.getContaConfirmada())
-            throw new RuntimeException("Conta já está confirmada. Faça login.");
+            throw new RegraDeNegocioRuntimeExpeptions("Conta já está confirmada. Faça login.");
 
         gerarTokenConfirmation(userEncontrado);
     }
