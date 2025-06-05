@@ -29,4 +29,14 @@ public class AccountController {
     public ResponseEntity<List<TransactionHistoryDTO>> buscarPixRealizado () {
         return ResponseEntity.ok(transactionService.buscarPixRealizados());
     }
+
+    @GetMapping("/pix/historico/recebido")
+    public ResponseEntity<List<TransactionHistoryDTO>> buscarPixRecebidos () {
+        return ResponseEntity.ok(transactionService.buscarPixRecebidos());
+    }
+
+    @GetMapping("/pix/historico/todos")
+    public ResponseEntity<List<TransactionHistoryDTO>> buscarPixTodos () {
+        return ResponseEntity.ok(transactionService.buscarTodosPixRealizados());
+    }
 }

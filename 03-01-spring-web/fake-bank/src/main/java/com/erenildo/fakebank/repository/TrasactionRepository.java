@@ -11,4 +11,6 @@ import java.util.Optional;
 public interface TrasactionRepository extends JpaRepository<Transaction, Long> {
 
     Optional<List<Transaction>> findByContaOrigemUsuarioId(String id);
+
+    Optional<List<Transaction>> findByContaDestinoUsuarioId(String id);
 }

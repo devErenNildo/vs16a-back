@@ -43,4 +43,35 @@ public class TransactionService {
         )).toList();
 
     }
+
+    public List<TransactionHistoryDTO> buscarPixRecebidos() {
+        String idUsuarioOrigem = tokenUtil.getUserIdFromToken();
+
+        List<Transaction> transactions;
+
+        accountRepository.findByUsuarioId(idUsuarioOrigem)
+                .orElseThrow(() -> new RegraDeNegocioRuntimeExpeptions("Conta origem não encontrada."));
+
+        transactions = trasactionRepository.findByContaDestinoUsuarioId(idUsuarioOrigem)
+                .orElseThrow(() -> new RegraDeNegocioRuntimeExpeptions("Conta origem não encontrada."));
+
+        assert transactions != null;
+        return transactions.stream().map(transaction -> new TransactionHistoryDTO(
+                transaction.getContaDestino().getUsuario().getFullName(),
+                transaction.getContaDestino().getChavePix(),
+                transaction.getValor(),
+                transaction.getDataHora(),
+                transaction.getDescricao()
+        )).toList();
+    }
+
+    public List<TransactionHistoryDTO> buscarTodosPixRealizados() {
+        return trasactionRepository.findAll().stream().map(transaction -> new TransactionHistoryDTO(
+                transaction.getContaDestino().getUsuario().getFullName(),
+                transaction.getContaDestino().getChavePix(),
+                transaction.getValor(),
+                transaction.getDataHora(),
+                transaction.getDescricao()
+        )).toList();
+    }
 }
