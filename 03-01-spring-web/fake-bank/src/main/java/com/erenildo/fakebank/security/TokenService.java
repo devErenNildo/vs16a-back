@@ -34,7 +34,7 @@ public class TokenService {
             throw new BadCredentialsException("cpf ou senha incorretos!");
         }
         var now = Instant.now();
-        var expiresIn = 300L;
+        long expiresIn = 3 * 60 * 60; // 3 horas
 
         var scopes = user.get().getRoles()
                 .stream()

@@ -9,5 +9,4 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class CadastrarPixRequestDTO {
     private String chavePix;
-    private String idUsuario;
 }
