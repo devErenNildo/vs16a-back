@@ -42,3 +42,13 @@ jobs:
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         source: 03-01-spring-web/fake-bank/target/*.jar
         target: /srv/http/api-fake-bank
+
+
+    - name: SSH e reiniciar o serviço
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.VPS_HOST }}
+        username: ${{ secrets.VPS_USER }}
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
+        script: |
+          sudo systemctl restart fakebank-api.service
