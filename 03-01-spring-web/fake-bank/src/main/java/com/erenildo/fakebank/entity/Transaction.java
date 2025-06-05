@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 
 @Data
 @Entity
-@Table(name = "tb_transaction")
+@Table(name = "tb_transacao")
 public class Transaction {
 
 
