@@ -7,6 +7,7 @@ import com.erenildo.fakebank.entity.Transaction;
 import com.erenildo.fakebank.entity.User;
 import com.erenildo.fakebank.repository.AccountRepository;
 import com.erenildo.fakebank.repository.TrasactionRepository;
+import com.erenildo.fakebank.security.TokenUtil;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -20,9 +21,13 @@ public class PixService {
 
     private final AccountRepository accountRepository;
     private final TrasactionRepository trasactionRepository;
+    private final TokenUtil tokenUtil;
 
     @Transactional
-    public void realizarTransacaoPix(String chaveDestino, BigDecimal valor, String idUsuarioOrigem, String descricao) {
+    public void realizarTransacaoPix(String chaveDestino, BigDecimal valor, String descricao) {
+
+        String idUsuarioOrigem = tokenUtil.getUserIdFromToken();
+
         Account origem = accountRepository.findByUsuarioId(idUsuarioOrigem)
                 .orElseThrow(() -> new RuntimeException("Conta origem não encontrada."));
 
@@ -54,7 +59,9 @@ public class PixService {
     }
 
     public MsgResponseDefaltDTO cadastrarPix(CadastrarPixRequestDTO dto) {
-        Account conta = accountRepository.findByUsuarioId(dto.getIdUsuario())
+        String idUsuarioOrigem = tokenUtil.getUserIdFromToken();
+
+        Account conta = accountRepository.findByUsuarioId(idUsuarioOrigem)
                 .orElseThrow(() -> new RuntimeException("Conta não encontrada."));
 
         if (conta.getChavePix() != null ) {

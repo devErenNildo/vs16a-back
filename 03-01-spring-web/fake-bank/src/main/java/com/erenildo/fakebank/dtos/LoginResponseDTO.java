@@ -5,8 +5,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
-public class CadastrarPixRequestDTO {
-    private String chavePix;
+@NoArgsConstructor
+public class LoginResponseDTO {
+    private String token;
+    private Long expiresIn;
 }

@@ -1,7 +1,11 @@
 package com.erenildo.fakebank.entity;
 
+import com.erenildo.fakebank.dtos.LoginRequestDTO;
 import jakarta.persistence.*;
 import lombok.Data;
+import org.springframework.security.crypto.password.PasswordEncoder;
+
+import java.util.Set;
 
 @Data
 @Entity
@@ -9,6 +13,7 @@ import lombok.Data;
 public class User {
 
     @Id
+    @Column(name = "user_id")
     private String id;
 
     @Column(name = "full_name", nullable = false)
@@ -31,4 +36,16 @@ public class User {
 
     @OneToOne(mappedBy = "usuario", cascade = CascadeType.ALL)
     private Account account;
+
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "tb_users_roles",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id")
+    )
+    private Set<Role> roles;
+
+    public boolean isLoginCorrect(LoginRequestDTO login, PasswordEncoder passwordEncoder) {
+        return passwordEncoder.matches(login.getSenha(), this.senha);
+    }
 }
