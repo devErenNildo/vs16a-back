@@ -1,5 +1,6 @@
 package com.erenildo.fakebank.controller;
 
+import com.erenildo.fakebank.dtos.AtualizarUserDTO;
 import com.erenildo.fakebank.dtos.CadastrarPixRequestDTO;
 import com.erenildo.fakebank.dtos.MsgResponseDefaltDTO;
 import com.erenildo.fakebank.service.PixService;
@@ -19,5 +20,10 @@ public class UserController {
     @PostMapping("/register-pix")
     public ResponseEntity<MsgResponseDefaltDTO> createUser(@RequestBody CadastrarPixRequestDTO dto) {
         return ResponseEntity.ok(pixService.cadastrarPix(dto));
+    }
+
+    @PutMapping("/atualizar/senha")
+    public ResponseEntity<MsgResponseDefaltDTO> updateUser(@RequestBody AtualizarUserDTO dto) {
+        return ResponseEntity.ok(userService.atualizarSenha(dto));
     }
 }

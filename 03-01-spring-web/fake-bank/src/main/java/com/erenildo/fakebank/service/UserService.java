@@ -1,8 +1,6 @@
 package com.erenildo.fakebank.service;
 
-import com.erenildo.fakebank.dtos.ConfirmAccountResponseDTO;
-import com.erenildo.fakebank.dtos.CreateAccountResponseDTO;
-import com.erenildo.fakebank.dtos.UserCreateAccountDTO;
+import com.erenildo.fakebank.dtos.*;
 import com.erenildo.fakebank.entity.Role;
 import com.erenildo.fakebank.entity.TokenConfirmation;
 import com.erenildo.fakebank.entity.User;
@@ -57,6 +55,20 @@ public class UserService {
         tokenConfirmationService.gerarTokenConfirmation(user);
 
         return new CreateAccountResponseDTO("Um token de confirmação foi enviado para o seu email");
+    }
+
+    public MsgResponseDefaltDTO atualizarSenha(AtualizarUserDTO dto) {
+        String idUser = tokenUtil.getUserIdFromToken();
+        User user = userRepository.findById(idUser)
+                .orElseThrow(() -> new RegraDeNegocioRuntimeExpeptions("Usuario não encontrado"));
+
+        String senha = bCryptPasswordEncoder.encode(dto.getSenha());
+
+        user.setSenha(senha);
+
+        userRepository.save(user);
+
+        return new MsgResponseDefaltDTO("Senha atualizada com sucesso");
     }
 
     @Transactional

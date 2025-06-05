@@ -1,8 +1,10 @@
 package com.erenildo.fakebank.controller;
 
+import com.erenildo.fakebank.dtos.ConsultaSaldoResponseDTO;
 import com.erenildo.fakebank.dtos.TransacaoRequestDTO;
 import com.erenildo.fakebank.dtos.TransacaoResponseDTO;
 import com.erenildo.fakebank.dtos.TransactionHistoryDTO;
+import com.erenildo.fakebank.service.AccountService;
 import com.erenildo.fakebank.service.PixService;
 import com.erenildo.fakebank.service.TransactionService;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +21,7 @@ public class AccountController {
 
     private final PixService pixService;
     private final TransactionService transactionService;
+    private final AccountService accountService;
 
     @PostMapping("/pix/enviar")
     public ResponseEntity<TransacaoResponseDTO> realizarPix (@RequestBody TransacaoRequestDTO dto) {
@@ -38,5 +41,10 @@ public class AccountController {
     @GetMapping("/pix/historico/todos")
     public ResponseEntity<List<TransactionHistoryDTO>> buscarPixTodos () {
         return ResponseEntity.ok(transactionService.buscarTodosPixRealizados());
+    }
+
+    @GetMapping("/saldo")
+    public ResponseEntity<ConsultaSaldoResponseDTO> getSaldo () {
+        return ResponseEntity.ok(accountService.saldo());
     }
 }

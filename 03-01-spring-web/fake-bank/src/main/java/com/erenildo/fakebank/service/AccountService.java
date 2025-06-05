@@ -1,8 +1,11 @@
 package com.erenildo.fakebank.service;
 
+import com.erenildo.fakebank.dtos.ConsultaSaldoResponseDTO;
 import com.erenildo.fakebank.entity.Account;
 import com.erenildo.fakebank.entity.User;
+import com.erenildo.fakebank.exception.RegraDeNegocioRuntimeExpeptions;
 import com.erenildo.fakebank.repository.AccountRepository;
+import com.erenildo.fakebank.security.TokenUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +18,7 @@ import java.util.Random;
 public class AccountService {
 
     private final AccountRepository accountRepository;
+    private final TokenUtil tokenUtil;
 
     public void createAccount(User user) {
         Account account = new Account();
@@ -25,6 +29,15 @@ public class AccountService {
         account.setNumeroAgencia(gerarNumeroAgencia());
 
         accountRepository.save(account);
+    }
+
+    public ConsultaSaldoResponseDTO saldo() {
+        String idUser = tokenUtil.getUserIdFromToken();
+
+        Account contaUser = accountRepository.findByUsuarioId(idUser)
+                .orElseThrow(() -> new RegraDeNegocioRuntimeExpeptions("Usuario não encontrado"));
+
+        return new ConsultaSaldoResponseDTO(contaUser.getSaldo());
     }
 
     private String gerarNumeroConta() {
