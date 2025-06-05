@@ -43,6 +43,7 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.POST, "/auth/create").permitAll()
                 .requestMatchers(HttpMethod.POST, "/auth/confirm_account").permitAll()
                     .requestMatchers(HttpMethod.POST, "/auth/resend-token").permitAll()
+                    .requestMatchers(HttpMethod.GET, "account/pix/historico/todos").hasAuthority("SCOPE_admin")
                     .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
                     .requestMatchers(
                             "/swagger-ui.html",
