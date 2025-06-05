@@ -3,9 +3,11 @@ package com.erenildo.fakebank.service;
 import com.erenildo.fakebank.dtos.ConfirmAccountResponseDTO;
 import com.erenildo.fakebank.dtos.CreateAccountResponseDTO;
 import com.erenildo.fakebank.dtos.UserCreateAccountDTO;
+import com.erenildo.fakebank.entity.Role;
 import com.erenildo.fakebank.entity.TokenConfirmation;
 import com.erenildo.fakebank.entity.User;
 import com.erenildo.fakebank.exception.EmailCadastradoException;
+import com.erenildo.fakebank.repository.RoleRepository;
 import com.erenildo.fakebank.repository.TokenConfirmationRepository;
 import com.erenildo.fakebank.repository.UserRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -15,6 +17,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Set;
 import java.util.UUID;
 
 @Service
@@ -27,6 +30,7 @@ public class UserService {
     private final TokenConfirmationService tokenConfirmationService;
     private final ObjectMapper objectMapper;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final RoleRepository roleRepository;
 
     public CreateAccountResponseDTO registerUser(UserCreateAccountDTO dto) {
         if (userRepository.existsByEmail(dto.getEmail())){
@@ -37,10 +41,13 @@ public class UserService {
             throw new EmailCadastradoException(dto.getEmail());
         }
 
+        Role roleBasic = roleRepository.findByRoleId(Role.Values.BASIC.getRoleId());
+
         User user = objectMapper.convertValue(dto, User.class);
         user.setContaConfirmada(false);
         user.setId(UUID.randomUUID().toString().replace("-", ""));
         user.setSenha(bCryptPasswordEncoder.encode(user.getSenha()));
+        user.setRoles(Set.of(roleBasic));
 
         userRepository.save(user);
 
