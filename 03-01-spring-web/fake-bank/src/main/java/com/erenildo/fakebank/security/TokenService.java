@@ -43,9 +43,10 @@ public class TokenService {
 
         var claims = JwtClaimsSet.builder()
                 .issuer("fakebank")
-                .subject(user.get().getEmail())
+                .subject(user.get().getId())
                 .issuedAt(now)
                 .expiresAt(now.plusSeconds(expiresIn))
+                .claim("email", user.get().getEmail())
                 .claim("scope", scopes)
                 .build();
 

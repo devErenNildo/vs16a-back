@@ -10,6 +10,7 @@ import com.erenildo.fakebank.exception.EmailCadastradoException;
 import com.erenildo.fakebank.repository.RoleRepository;
 import com.erenildo.fakebank.repository.TokenConfirmationRepository;
 import com.erenildo.fakebank.repository.UserRepository;
+import com.erenildo.fakebank.security.TokenUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -31,6 +32,7 @@ public class UserService {
     private final ObjectMapper objectMapper;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final RoleRepository roleRepository;
+    private final TokenUtil tokenUtil;
 
     public CreateAccountResponseDTO registerUser(UserCreateAccountDTO dto) {
         if (userRepository.existsByEmail(dto.getEmail())){
