@@ -1,7 +1,9 @@
 package com.erenildo.fakebank.entity;
 
+import com.erenildo.fakebank.dtos.LoginRequestDTO;
 import jakarta.persistence.*;
 import lombok.Data;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Set;
 
@@ -42,4 +44,8 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "role_id")
     )
     private Set<Role> roles;
+
+    public boolean isLoginCorrect(LoginRequestDTO login, PasswordEncoder passwordEncoder) {
+        return passwordEncoder.matches(login.getSenha(), this.senha);
+    }
 }

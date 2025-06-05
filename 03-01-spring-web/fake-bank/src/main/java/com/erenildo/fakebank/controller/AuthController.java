@@ -1,6 +1,7 @@
 package com.erenildo.fakebank.controller;
 
 import com.erenildo.fakebank.dtos.*;
+import com.erenildo.fakebank.security.TokenService;
 import com.erenildo.fakebank.service.TokenConfirmationService;
 import com.erenildo.fakebank.service.UserService;
 import jakarta.validation.Valid;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthController {
     private final UserService userService;
     private final TokenConfirmationService tokenConfirmationService;
+    private final TokenService tokenService;
 
     @PostMapping("/create")
     public ResponseEntity<CreateAccountResponseDTO> createAccount (@RequestBody @Valid UserCreateAccountDTO dto) {
@@ -33,6 +35,11 @@ public class AuthController {
     public ResponseEntity<CreateAccountResponseDTO> resendToken (@RequestBody @Valid ResendTokenRequestDTO email) {
         tokenConfirmationService.reenviarToken(email);
         return ResponseEntity.ok(new CreateAccountResponseDTO("Token reenviado com sucesso"));
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<LoginResponseDTO> login (@RequestBody @Valid LoginRequestDTO dto) {
+        return ResponseEntity.ok(tokenService.generateToken(dto));
     }
 
 }
