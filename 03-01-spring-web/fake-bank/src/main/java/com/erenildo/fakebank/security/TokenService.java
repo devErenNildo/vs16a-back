@@ -5,6 +5,8 @@ import com.erenildo.fakebank.dtos.LoginRequestDTO;
 import com.erenildo.fakebank.dtos.LoginResponseDTO;
 import com.erenildo.fakebank.entity.Role;
 import com.erenildo.fakebank.entity.User;
+import com.erenildo.fakebank.exception.RegraDeNegocioException;
+import com.erenildo.fakebank.exception.RegraDeNegocioRuntimeExpeptions;
 import com.erenildo.fakebank.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -31,7 +33,7 @@ public class TokenService {
         Optional<User> user = userRepository.findByCpf(dto.getCpf());
 
         if (user.isEmpty() || !user.get().isLoginCorrect(dto, passwordEncoder)) {
-            throw new BadCredentialsException("cpf ou senha incorretos!");
+            throw new RegraDeNegocioRuntimeExpeptions("cpf ou senha incorretos!");
         }
         var now = Instant.now();
         long expiresIn = 3 * 60 * 60; // 3 horas
