@@ -46,19 +46,6 @@ erDiagram
         INT role_id FK
     }
 
-    flyway_schema_history {
-        INT installed_rank PK
-        VARCHAR version
-        VARCHAR description
-        VARCHAR type
-        VARCHAR script
-        VARCHAR checksum
-        VARCHAR installed_by
-        TIMESTAMP installed_on
-        INT execution_time
-        BOOLEAN success
-    }
-
     tb_user ||--o{ tb_account : "possui"
     tb_user ||--o{ tb_token_confirmation : "tem"
     tb_user ||--o{ tb_users_roles : "tem"
