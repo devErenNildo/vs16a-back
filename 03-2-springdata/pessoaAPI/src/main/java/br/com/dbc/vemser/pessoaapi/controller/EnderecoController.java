@@ -17,41 +17,41 @@ import java.util.List;
 @RequestMapping("/endereco")
 @RequiredArgsConstructor
 public class EnderecoController {
-//    private final EnderecoService enderecoService;
-//
-//    @GetMapping
-//    public ResponseEntity<List<EnderecoResponseDTO>> getAll() {
-//        return ResponseEntity.ok().body(enderecoService.getAll());
-//    }
-//
-//    @GetMapping("/{idEndereco}")
-//    public ResponseEntity<EnderecoResponseDTO> getById(@PathVariable Integer idEndereco) throws Exception {
-//        return ResponseEntity.ok().body(enderecoService.getById(idEndereco));
-//    }
-//
-//    @GetMapping("/pessoa/{idPessoa}")
-//    public ResponseEntity<List<EnderecoResponseDTO>> getByPessoa(@PathVariable Integer idPessoa) {
-//        return ResponseEntity.ok().body(enderecoService.getByIdPessoa(idPessoa));
-//    }
-//
-//    @PostMapping("/{idPessoa}")
-//    public ResponseEntity<EnderecoResponseDTO> create(
-//            @PathVariable Integer idPessoa,
-//            @RequestBody @Valid EnderecoRequestDTO endereco
-//    ) throws Exception {
-//        return ResponseEntity.status(HttpStatus.CREATED).body(enderecoService.create(idPessoa, endereco));
-//    }
-//
-//    @PutMapping("/{idEndereco}")
-//    public ResponseEntity<EnderecoResponseDTO> update(
-//            @PathVariable Integer idEndereco,
-//            @RequestBody @Valid EnderecoRequestDTO endereco
-//    ) throws Exception {
-//        return ResponseEntity.ok().body(enderecoService.update(idEndereco, endereco));
-//    }
-//
-//    @DeleteMapping("/{idEndereco}")
-//    public ResponseEntity<String> delete(@PathVariable Integer idEndereco) throws Exception {
-//        return ResponseEntity.ok().body(enderecoService.delete(idEndereco));
-//    }
+    private final EnderecoService enderecoService;
+
+    @GetMapping
+    public ResponseEntity<List<EnderecoResponseDTO>> getAll() {
+        return ResponseEntity.ok().body(enderecoService.getAll());
+    }
+
+    @GetMapping("/{idEndereco}")
+    public ResponseEntity<EnderecoResponseDTO> getById(@PathVariable Integer idEndereco) throws Exception {
+        return ResponseEntity.ok().body(enderecoService.getById(idEndereco));
+    }
+
+    @GetMapping("/pessoa/{idPessoa}")
+    public ResponseEntity<List<EnderecoResponseDTO>> getByPessoa(@PathVariable Integer idPessoa) {
+        return ResponseEntity.ok().body(enderecoService.getByIdPessoa(idPessoa));
+    }
+
+    @PostMapping("/{idPessoa}")
+    public ResponseEntity<EnderecoResponseDTO> create(
+            @PathVariable Integer idPessoa,
+            @RequestBody @Valid EnderecoRequestDTO endereco
+    ) throws Exception {
+        return ResponseEntity.status(HttpStatus.CREATED).body(enderecoService.create(idPessoa, endereco));
+    }
+
+    @PutMapping("/{idEndereco}")
+    public ResponseEntity<EnderecoResponseDTO> update(
+            @PathVariable Integer idEndereco,
+            @RequestBody @Valid EnderecoRequestDTO endereco
+    ) throws Exception {
+        return ResponseEntity.ok().body(enderecoService.update(idEndereco, endereco));
+    }
+
+    @DeleteMapping("/{idEndereco}")
+    public ResponseEntity<String> delete(@PathVariable Integer idEndereco) throws Exception {
+        return ResponseEntity.ok().body(enderecoService.delete(idEndereco));
+    }
 }

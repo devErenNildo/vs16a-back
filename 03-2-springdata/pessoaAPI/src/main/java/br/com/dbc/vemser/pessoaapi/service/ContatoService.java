@@ -15,7 +15,6 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class ContatoService {
     private final ContatoRepository contatoRepository;
-    private final PessoaService pessoaService;
     private final ObjectMapper objectMapper;
 
 
@@ -30,7 +29,7 @@ public class ContatoService {
 
     public List<ContatoResponseDTO> getByIdPessoa(Integer type) throws Exception {
 
-        Optional<Contato> contatos = contatoRepository.findByTipoContatoTipo(type);
+        List<Contato> contatos = contatoRepository.findByTipoOrdinal(type);
 
 
         return objectMapper.convertValue(
