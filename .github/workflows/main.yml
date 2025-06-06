@@ -2,8 +2,7 @@ name: Deploy Fake Bank to VPS
 
 on:
   push:
-    branches:
-      - main
+      # - main
   workflow_dispatch:
 
 jobs:
