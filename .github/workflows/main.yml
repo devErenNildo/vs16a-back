@@ -1,8 +1,6 @@
 name: Deploy Fake Bank to VPS
 
 on:
-  push:
-      # - main
   workflow_dispatch:
 
 jobs:
