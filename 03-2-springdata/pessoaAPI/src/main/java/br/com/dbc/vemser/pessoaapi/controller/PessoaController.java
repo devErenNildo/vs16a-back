@@ -21,33 +21,33 @@ import java.util.List;
 @RequestMapping("/pessoa")
 @RequiredArgsConstructor
 public class PessoaController  {
-//    private final PessoaService pessoaService;
-//
-//    @GetMapping
-//    public ResponseEntity<List<PessoaResponseDTO>> list() {
-//        return ResponseEntity.ok().body(pessoaService.list());
-//    }
-//
-//    @GetMapping("/byname")
-//    public ResponseEntity<List<PessoaResponseDTO>> listByName( @RequestParam("nome") String nome) {
-//        return ResponseEntity.ok().body(pessoaService.listByName(nome));
-//    }
-//
-//    @PostMapping
-//    public ResponseEntity<PessoaResponseDTO>  create(@RequestBody @Valid PessoaRequestDTO pessoa) {
-//        return ResponseEntity.status(HttpStatus.CREATED).body(pessoaService.create(pessoa));
-//    }
-//
-//    @PutMapping("/{idPessoa}")
-//    public ResponseEntity<PessoaResponseDTO> update(
-//            @PathVariable("idPessoa") Integer id,
-//            @RequestBody @Valid PessoaRequestDTO pessoaAtualizar
-//    ) throws Exception {
-//        return ResponseEntity.ok().body(pessoaService.update(id, pessoaAtualizar));
-//    }
-//
-//    @DeleteMapping("/{idPessoa}")
-//    public void delete(@PathVariable("idPessoa") Integer id) throws Exception {
-//        pessoaService.delete(id);
-//    }
+    private final PessoaService pessoaService;
+
+    @GetMapping
+    public ResponseEntity<List<PessoaResponseDTO>> list() {
+        return ResponseEntity.ok().body(pessoaService.list());
+    }
+
+    @GetMapping("/byname")
+    public ResponseEntity<List<PessoaResponseDTO>> listByName( @RequestParam("nome") String nome) {
+        return ResponseEntity.ok().body(pessoaService.listByName(nome));
+    }
+
+    @PostMapping
+    public ResponseEntity<PessoaResponseDTO>  create(@RequestBody @Valid PessoaRequestDTO pessoa) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(pessoaService.create(pessoa));
+    }
+
+    @PutMapping("/{idPessoa}")
+    public ResponseEntity<PessoaResponseDTO> update(
+            @PathVariable("idPessoa") Integer id,
+            @RequestBody @Valid PessoaRequestDTO pessoaAtualizar
+    ) throws Exception {
+        return ResponseEntity.ok().body(pessoaService.update(id, pessoaAtualizar));
+    }
+
+    @DeleteMapping("/{idPessoa}")
+    public void delete(@PathVariable("idPessoa") Integer id) throws Exception {
+        pessoaService.delete(id);
+    }
 }
