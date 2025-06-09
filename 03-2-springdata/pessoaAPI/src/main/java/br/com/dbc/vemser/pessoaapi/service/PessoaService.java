@@ -3,6 +3,7 @@ package br.com.dbc.vemser.pessoaapi.service;
 import br.com.dbc.vemser.pessoaapi.dtos.PessoaCompletaResponseDTO;
 import br.com.dbc.vemser.pessoaapi.dtos.PessoaRequestDTO;
 import br.com.dbc.vemser.pessoaapi.dtos.PessoaResponseDTO;
+import br.com.dbc.vemser.pessoaapi.dtos.relatorio.*;
 import br.com.dbc.vemser.pessoaapi.entity.Pessoa;
 import br.com.dbc.vemser.pessoaapi.entity.PessoaEndereco;
 import br.com.dbc.vemser.pessoaapi.exception.RegraDeNegocioException;
@@ -21,6 +22,41 @@ public class PessoaService {
     private final PessoaEnderecoRepository pessoaEnderecoRepository;
     private final ObjectMapper objectMapper;
     private final EmailService emailService;
+
+    public List<RelatorioPersonalizadoDTO> gerarRelatorioPersonalizado(Integer idPessoa) {
+        List<FlatRelatorioDTO> flatList = pessoaRepository.buscarPessoaRelatorio(idPessoa);
+
+        return flatList.stream().map(flat -> {
+            RelatorioPersonalizadoDTO relatorio = new RelatorioPersonalizadoDTO();
+            relatorio.setIdPessoa(flat.getIdPessoa());
+            relatorio.setNome(flat.getNome());
+            relatorio.setEmail(flat.getEmail());
+
+
+            if (flat.getNumeroContato() != null) {
+                ContatoRelatorio contato = new ContatoRelatorio();
+                contato.setNumero(flat.getNumeroContato());
+                relatorio.setContato(contato);
+            }
+
+            if (flat.getCep() != null) {
+                EnderecoRelatorio endereco = new EnderecoRelatorio();
+                endereco.setCep(flat.getCep());
+                endereco.setCidade(flat.getCidade());
+                endereco.setEstado(flat.getEstado());
+                endereco.setPais(flat.getPais());
+                relatorio.setEndereco(endereco);
+            }
+
+            if (flat.getNomePet() != null) {
+                PetRelatorio pet = new PetRelatorio();
+                pet.setNome(flat.getNomePet());
+                relatorio.setPet(pet);
+            }
+
+            return relatorio;
+        }).toList();
+    }
 
     public PessoaResponseDTO create(PessoaRequestDTO pessoa){
         Pessoa newPessoa = objectMapper.convertValue(pessoa, Pessoa.class);

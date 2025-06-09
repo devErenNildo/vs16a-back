@@ -1,5 +1,6 @@
 package br.com.dbc.vemser.pessoaapi.repository;
 
+import br.com.dbc.vemser.pessoaapi.dtos.relatorio.FlatRelatorioDTO;
 import br.com.dbc.vemser.pessoaapi.entity.Pessoa;
 import br.com.dbc.vemser.pessoaapi.entity.TipoContato;
 import org.springframework.data.domain.Page;
@@ -19,6 +20,26 @@ public interface PessoaRepository extends JpaRepository<Pessoa, Integer> {
     public List<Pessoa> findAllByCpfContains(String cpf);
 
     List<Pessoa> findAllByDataNascimentoBetween(LocalDate dtInicial, LocalDate dtFinal);
+
+    @Query("""
+    SELECT new br.com.dbc.vemser.pessoaapi.dtos.relatorio.FlatRelatorioDTO(
+        p.idPessoa, p.nome, p.email,
+        c.numero,
+        e.cep, e.cidade, e.estado, e.pais,
+        pet.nome
+    )
+    FROM PESSOA p
+    LEFT JOIN p.contatos c
+    LEFT JOIN PESSOA_X_ENDERECO pe ON pe.pessoa.idPessoa = p.idPessoa
+    LEFT JOIN ENDERECO e ON pe.endereco.idEndereco = e.idEndereco
+    LEFT JOIN PET pet ON pet.pessoa.idPessoa = p.idPessoa
+    WHERE (:idPessoa IS NULL OR p.idPessoa = :idPessoa)
+""")
+    List<FlatRelatorioDTO> buscarPessoaRelatorio(@Param("idPessoa") Integer idPessoa);
+
+    @Query("SELECT p FROM PESSOA p WHERE p.dataNascimento BETWEEN :dataInicio AND :dataFim")
+    List<Pessoa> buscarPorIntervaloDeNascimento(@Param("dataInicio") LocalDate dataInicio,
+                                                @Param("dataFim") LocalDate dataFim);
 
     // jpql = (java) persistence query language
     @Query(" select p " +
