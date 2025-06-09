@@ -1,5 +1,6 @@
 package br.com.dbc.vemser.pessoaapi.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
@@ -7,7 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
-import java.util.List;
+import java.util.Set;
 
 @Data
 @Entity(name = "PESSOA")
@@ -28,6 +29,10 @@ public class Pessoa {
     @Column(name = "DATA_NASCIMENTO")
     private LocalDate dataNascimento;
 
+    @JsonIgnore
+    @OneToOne(mappedBy = "pessoa", cascade = CascadeType.ALL)
+    private Pet pet;
+
     @NotNull
     @Column(name = "CPF", length = 11, nullable = false)
     private String cpf;
@@ -36,6 +41,8 @@ public class Pessoa {
     @Column(name = "EMAIL", length = 255, nullable = false)
     private String email;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "pessoa", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Contato> contatos;
+    private Set<Contato> contatos;
+
 }

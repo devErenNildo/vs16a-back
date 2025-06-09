@@ -29,18 +29,18 @@ public class EnderecoController {
         return ResponseEntity.ok().body(enderecoService.getById(idEndereco));
     }
 
-    @GetMapping("/pessoa/{idPessoa}")
-    public ResponseEntity<List<EnderecoResponseDTO>> getByPessoa(@PathVariable Integer idPessoa) {
-        return ResponseEntity.ok().body(enderecoService.getByIdPessoa(idPessoa));
-    }
+//    @GetMapping("/pessoa/{idPessoa}")
+//    public ResponseEntity<List<EnderecoResponseDTO>> getByPessoa(@PathVariable Integer idPessoa) {
+//        return ResponseEntity.ok().body(enderecoService.getByIdPessoa(idPessoa));
+//    }
 
-    @PostMapping("/{idPessoa}")
-    public ResponseEntity<EnderecoResponseDTO> create(
-            @PathVariable Integer idPessoa,
-            @RequestBody @Valid EnderecoRequestDTO endereco
-    ) throws Exception {
-        return ResponseEntity.status(HttpStatus.CREATED).body(enderecoService.create(idPessoa, endereco));
-    }
+//    @PostMapping("/{idPessoa}")
+//    public ResponseEntity<EnderecoResponseDTO> create(
+//            @PathVariable Integer idPessoa,
+//            @RequestBody @Valid EnderecoRequestDTO endereco
+//    ) throws Exception {
+//        return ResponseEntity.status(HttpStatus.CREATED).body(enderecoService.create(idPessoa, endereco));
+//    }
 
     @PutMapping("/{idEndereco}")
     public ResponseEntity<EnderecoResponseDTO> update(
