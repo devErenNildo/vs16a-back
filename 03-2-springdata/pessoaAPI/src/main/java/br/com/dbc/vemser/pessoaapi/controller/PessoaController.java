@@ -1,6 +1,7 @@
 package br.com.dbc.vemser.pessoaapi.controller;
 
 import br.com.dbc.vemser.pessoaapi.controller.docs.PessoaControllerDocs;
+import br.com.dbc.vemser.pessoaapi.dtos.PessoaCompletaResponseDTO;
 import br.com.dbc.vemser.pessoaapi.dtos.PessoaRequestDTO;
 import br.com.dbc.vemser.pessoaapi.dtos.PessoaResponseDTO;
 import br.com.dbc.vemser.pessoaapi.entity.Pessoa;
@@ -8,6 +9,7 @@ import br.com.dbc.vemser.pessoaapi.service.PessoaService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.websocket.server.PathParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -49,5 +51,16 @@ public class PessoaController  {
     @DeleteMapping("/{idPessoa}")
     public void delete(@PathVariable("idPessoa") Integer id) throws Exception {
         pessoaService.delete(id);
+    }
+
+    @GetMapping("/completo/{idPessoa}")
+    public ResponseEntity<PessoaCompletaResponseDTO> listarPessoaCompleta(
+            @PathParam("idPessoa") Integer idPessoa,
+            @RequestParam(required = false, defaultValue = "false") boolean enderecos,
+            @RequestParam(required = false, defaultValue = "false") boolean contatos,
+            @RequestParam(required = false, defaultValue = "false") boolean pets) throws Exception {
+
+        PessoaCompletaResponseDTO dto = pessoaService.pessoaCompleta(enderecos, contatos, pets, idPessoa);
+        return ResponseEntity.ok(dto);
     }
 }

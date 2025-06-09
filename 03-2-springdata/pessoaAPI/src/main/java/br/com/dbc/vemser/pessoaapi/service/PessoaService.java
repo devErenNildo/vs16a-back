@@ -1,9 +1,12 @@
 package br.com.dbc.vemser.pessoaapi.service;
 
-import br.com.dbc.vemser.pessoaapi.dtos.EnderecoResponseDTO;
+import br.com.dbc.vemser.pessoaapi.dtos.PessoaCompletaResponseDTO;
 import br.com.dbc.vemser.pessoaapi.dtos.PessoaRequestDTO;
 import br.com.dbc.vemser.pessoaapi.dtos.PessoaResponseDTO;
 import br.com.dbc.vemser.pessoaapi.entity.Pessoa;
+import br.com.dbc.vemser.pessoaapi.entity.PessoaEndereco;
+import br.com.dbc.vemser.pessoaapi.exception.RegraDeNegocioException;
+import br.com.dbc.vemser.pessoaapi.repository.PessoaEnderecoRepository;
 import br.com.dbc.vemser.pessoaapi.repository.PessoaRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -15,9 +18,9 @@ import java.util.List;
 @RequiredArgsConstructor
 public class PessoaService {
     private final PessoaRepository pessoaRepository;
+    private final PessoaEnderecoRepository pessoaEnderecoRepository;
     private final ObjectMapper objectMapper;
     private final EmailService emailService;
-//    private final EmailService emailService;
 
     public PessoaResponseDTO create(PessoaRequestDTO pessoa){
         Pessoa newPessoa = objectMapper.convertValue(pessoa, Pessoa.class);
@@ -26,7 +29,6 @@ public class PessoaService {
 
         emailService.sendEmail(pessoa.getEmail(), pessoa.getNome(), newPessoa.getIdPessoa());
 
-        emailService.sendEmail(pessoa.getEmail(), pessoa.getNome(), newPessoa.getIdPessoa());
         return objectMapper.convertValue(newPessoa, PessoaResponseDTO.class);
     }
 
@@ -78,7 +80,30 @@ public class PessoaService {
                 .toList();
     }
 
-    private Pessoa getPessoa(Integer id) throws Exception {
-        return pessoaRepository.findById(id).get();
+    public Pessoa getPessoa(Integer id) throws Exception {
+        return pessoaRepository.findById(id).
+                orElseThrow(() -> new RegraDeNegocioException("Usuário não encontrado"));
+    }
+
+    public PessoaCompletaResponseDTO pessoaCompleta(Boolean enderecos, Boolean contatos, Boolean pets, Integer idPssoa) throws Exception {
+        Pessoa pessoa = getPessoa(idPssoa);
+        PessoaCompletaResponseDTO responseDTO = objectMapper.convertValue(pessoa, PessoaCompletaResponseDTO.class);
+
+        if (enderecos) {
+            responseDTO.setEnderecos(pessoaEnderecoRepository.findByPessoaIdPessoa(idPssoa)
+                    .stream()
+                    .map(PessoaEndereco::getEndereco)
+                    .toList());
+        }
+
+        if (contatos) {
+            responseDTO.setContatos(pessoa.getContatos());
+        }
+
+        if (pets) {
+            responseDTO.setPet(pessoa.getPet());
+        }
+
+        return responseDTO;
     }
 }
