@@ -4,6 +4,7 @@ import br.com.dbc.vemser.pessoaapi.controller.docs.PessoaControllerDocs;
 import br.com.dbc.vemser.pessoaapi.dtos.PessoaCompletaResponseDTO;
 import br.com.dbc.vemser.pessoaapi.dtos.PessoaRequestDTO;
 import br.com.dbc.vemser.pessoaapi.dtos.PessoaResponseDTO;
+import br.com.dbc.vemser.pessoaapi.dtos.relatorio.RelatorioPersonalizadoDTO;
 import br.com.dbc.vemser.pessoaapi.entity.Pessoa;
 import br.com.dbc.vemser.pessoaapi.service.PessoaService;
 import jakarta.validation.Valid;
@@ -62,5 +63,11 @@ public class PessoaController  {
 
         PessoaCompletaResponseDTO dto = pessoaService.pessoaCompleta(enderecos, contatos, pets, idPessoa);
         return ResponseEntity.ok(dto);
+    }
+
+    @GetMapping("/pessoa-completo")
+    public ResponseEntity<List<RelatorioPersonalizadoDTO>> listarRelatorio(
+            @RequestParam(required = false) Integer idPessoa) {
+        return ResponseEntity.ok(pessoaService.gerarRelatorioPersonalizado(idPessoa));
     }
 }
