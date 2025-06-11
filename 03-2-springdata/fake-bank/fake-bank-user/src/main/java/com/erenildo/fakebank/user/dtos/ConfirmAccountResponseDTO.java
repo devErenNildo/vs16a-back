@@ -1,0 +1,13 @@
+package com.erenildo.fakebank.user.dtos;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class ConfirmAccountResponseDTO {
+    private String email;
+    private String msg;
+}
