@@ -1,6 +1,8 @@
 package com.erenildo.fakebank.controller;
 
 import com.erenildo.fakebank.dtos.*;
+import com.erenildo.fakebank.entity.PessoaEntity;
+import com.erenildo.fakebank.security.TokenService;
 import com.erenildo.fakebank.service.TokenConfirmationService;
 import com.erenildo.fakebank.service.UserService;
 import javax.validation.Valid;
@@ -9,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -22,11 +25,13 @@ public class AuthController {
     private final UserService userService;
     private final TokenConfirmationService tokenConfirmationService;
     public final AuthenticationManager authenticationManager;
+    private final TokenService tokenService;
 
-    public AuthController(UserService userService, TokenConfirmationService tokenConfirmationService, AuthenticationManager authenticationManager) {
+    public AuthController(UserService userService, TokenConfirmationService tokenConfirmationService, AuthenticationManager authenticationManager, TokenService tokenService) {
         this.userService = userService;
         this.tokenConfirmationService = tokenConfirmationService;
         this.authenticationManager = authenticationManager;
+        this.tokenService = tokenService;
     }
 
     @PostMapping("/create")
@@ -46,13 +51,16 @@ public class AuthController {
     }
 
     @PostMapping
-    public ResponseEntity login (@RequestBody @Valid LoginRequestDTO dto) {
+    public ResponseEntity<String> login (@RequestBody @Valid LoginRequestDTO dto) {
         UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
                 new UsernamePasswordAuthenticationToken(dto.getLogin(), dto.getSenha());
 
-        authenticationManager.authenticate(usernamePasswordAuthenticationToken);
+        Authentication authentication =
+                authenticationManager.authenticate(usernamePasswordAuthenticationToken);
 
-        return ResponseEntity.ok().build();
+        PessoaEntity pessoa = (PessoaEntity) authentication.getPrincipal();
+
+        return ResponseEntity.ok(tokenService.generateToken(pessoa));
     }
 
 }
