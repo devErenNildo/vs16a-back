@@ -21,13 +21,13 @@ public class User {
     private Boolean contaConfirmada = false;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<ContaBancaria> contasBancarias;
-
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<ContaMensal> contasMensais;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Boleto> boletos;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<GastoAvulso> gastoAvulsos;
 
 
     // Getter Setter
@@ -64,14 +64,6 @@ public class User {
         this.dataCadastro = dataCadastro;
     }
 
-    public List<ContaBancaria> getContasBancarias() {
-        return contasBancarias;
-    }
-
-    public void setContasBancarias(List<ContaBancaria> contasBancarias) {
-        this.contasBancarias = contasBancarias;
-    }
-
     public List<ContaMensal> getContasMensais() {
         return contasMensais;
     }
@@ -94,5 +86,13 @@ public class User {
 
     public void setBoletos(List<Boleto> boletos) {
         this.boletos = boletos;
+    }
+
+    public List<GastoAvulso> getGastoAvulsos() {
+        return gastoAvulsos;
+    }
+
+    public void setGastoAvulsos(List<GastoAvulso> gastoAvulsos) {
+        this.gastoAvulsos = gastoAvulsos;
     }
 }

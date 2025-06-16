@@ -2,6 +2,7 @@ package com.erenildo.muitaconta.entity;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.List;
 
 @Entity
 @Table(name = "tb_cartao_credito")
@@ -22,9 +23,8 @@ public class CartaoCredito {
 
     private Integer diaVencimentoFatura;
 
-    @ManyToOne
-    @JoinColumn(name = "id_conta_bancaria")
-    private ContaBancaria contaBancaria;
+    @OneToMany(mappedBy = "cartaoCredito", cascade = CascadeType.ALL)
+    private List<GastoCartao> gastos;
 
     // Getter Setter
 
@@ -68,11 +68,11 @@ public class CartaoCredito {
         this.diaVencimentoFatura = diaVencimentoFatura;
     }
 
-    public ContaBancaria getContaBancaria() {
-        return contaBancaria;
+    public List<GastoCartao> getGastos() {
+        return gastos;
     }
 
-    public void setContaBancaria(ContaBancaria contaBancaria) {
-        this.contaBancaria = contaBancaria;
+    public void setGastos(List<GastoCartao> gastos) {
+        this.gastos = gastos;
     }
 }
