@@ -7,6 +7,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
@@ -52,8 +53,12 @@ public class TokenService {
 
             String user = body.get(Claims.ID, String.class);
             if (user != null) {
+                List<String> cargos = body.get("cargos", List.class);
+                List<SimpleGrantedAuthority> authorities = cargos.stream()
+                        .map(SimpleGrantedAuthority::new)
+                        .toList();
                 UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
-                        new UsernamePasswordAuthenticationToken(user, null, Collections.emptyList());
+                        new UsernamePasswordAuthenticationToken(user, null, authorities);
                 return usernamePasswordAuthenticationToken;
             }
         }

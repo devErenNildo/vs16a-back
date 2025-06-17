@@ -37,7 +37,7 @@ public class Login implements UserDetails {
     // Security
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of();
+        return cargos;
     }
 
     @Override

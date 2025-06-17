@@ -4,9 +4,11 @@ import com.erenildo.muitaconta.dtos.user.ConfirmarContaRequestDTO;
 import com.erenildo.muitaconta.dtos.user.ConfirmarContaResponseDTO;
 import com.erenildo.muitaconta.dtos.user.CriarContaRequestDTO;
 import com.erenildo.muitaconta.dtos.user.CriarContaResponseDTO;
+import com.erenildo.muitaconta.entity.Login;
 import com.erenildo.muitaconta.entity.TokenConfirmacao;
 import com.erenildo.muitaconta.entity.User;
 import com.erenildo.muitaconta.exceptions.RegraDeNegocioException;
+import com.erenildo.muitaconta.repository.LoginRepository;
 import com.erenildo.muitaconta.repository.TokenConfirmacaoRepository;
 import com.erenildo.muitaconta.repository.UserRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -23,19 +25,22 @@ public class UserService {
     private final TokenConfirmacaoService tokenConfirmacaoService;
     private final TokenConfirmacaoRepository tokenConfirmacaoRepository;
     private final LoginService loginService;
+    private final LoginRepository loginRepository;
 
     public UserService(
             UserRepository userRepository,
             ObjectMapper objectMapper,
             TokenConfirmacaoService tokenConfirmacaoService,
             TokenConfirmacaoRepository tokenConfirmacaoRepository,
-            LoginService loginService
+            LoginService loginService,
+            LoginRepository loginRepository
     ) {
         this.userRepository = userRepository;
         this.objectMapper = objectMapper;
         this.tokenConfirmacaoService = tokenConfirmacaoService;
         this.tokenConfirmacaoRepository = tokenConfirmacaoRepository;
         this.loginService = loginService;
+        this.loginRepository = loginRepository;
     }
 
 
@@ -80,5 +85,19 @@ public class UserService {
         loginService.criarLogin(user, dto.getSenha());
 
         return new ConfirmarContaResponseDTO(user.getEmail(), "Sua conta foi confirmada com sucesso");
+    }
+
+    public void apagarUsuario(String id) throws Exception {
+        User userExistente = userRepository.findById(id)
+                .orElseThrow(() -> new RegraDeNegocioException("Usuário não encontrado"));
+
+        Login loginUser = loginRepository.findByLogin(userExistente.getEmail())
+                .orElseThrow(() -> new RegraDeNegocioException("Login não encontrado"));
+
+        loginRepository.delete(loginUser);
+
+        userExistente.setNome("Deletado");
+        userExistente.setEmail("Deletado");
+        userRepository.save(userExistente);
     }
 }

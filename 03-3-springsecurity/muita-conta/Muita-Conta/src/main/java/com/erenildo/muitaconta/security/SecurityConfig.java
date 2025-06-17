@@ -31,6 +31,7 @@ public class SecurityConfig {
                 .csrf().disable()
                 .authorizeHttpRequests((authz) -> authz
                         .antMatchers("/auth/**", "/").permitAll()
+                        .antMatchers("/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 );
         http.addFilterBefore(new TokenAuthFilter(tokenService), UsernamePasswordAuthenticationFilter.class);
