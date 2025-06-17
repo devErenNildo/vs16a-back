@@ -22,7 +22,7 @@ jobs:
       run: echo "Entrando no projeto fake-bank..."
 
     - name: Build com Maven
-      working-directory: ./03-01-spring-web/fake-bank
+      working-directory: ./03-3-springsecurity/muita-conta/Muita-Conta
       run: mvn clean package -DskipTests
 
     - name: Copiar JAR para VPS via SCP
