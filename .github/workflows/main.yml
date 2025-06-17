@@ -31,7 +31,7 @@ jobs:
         host: ${{ secrets.VPS_HOST }}
         username: ${{ secrets.VPS_USER }}
         key: ${{ secrets.SSH_PRIVATE_KEY }}
-        source: /03-3-springsecurity/muita-conta/Muita-Conta/target/*.jar
+        source: 03-3-springsecurity/muita-conta/Muita-Conta/target/*.jar
         target: /srv/http/api-muitaconta
         # target: /srv/http/api-fake-bank
 
