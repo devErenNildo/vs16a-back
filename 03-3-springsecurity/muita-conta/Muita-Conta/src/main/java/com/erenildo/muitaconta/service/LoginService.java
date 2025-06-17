@@ -2,7 +2,9 @@ package com.erenildo.muitaconta.service;
 
 import com.erenildo.muitaconta.entity.Login;
 import com.erenildo.muitaconta.entity.User;
+import com.erenildo.muitaconta.exceptions.RegraDeNegocioException;
 import com.erenildo.muitaconta.repository.LoginRepository;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -35,6 +37,24 @@ public class LoginService {
         login.setId(UUID.randomUUID().toString().replace("-", ""));
         login.setUser(user);
         loginRepository.save(login);
+    }
+
+    protected User buscarUserLogago() throws Exception {
+        Login login = buscarLoginPorId(getIdUSerLogado());
+        return returnUserLogin(login);
+    }
+
+    private String getIdUSerLogado() {
+        return (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    }
+
+    private Login buscarLoginPorId(String id) throws Exception{
+        return loginRepository.findById(id)
+                .orElseThrow(() -> new RegraDeNegocioException("Usuário não encontrado"));
+    }
+
+    private User returnUserLogin(Login login) {
+        return login.getUser();
     }
 
 }

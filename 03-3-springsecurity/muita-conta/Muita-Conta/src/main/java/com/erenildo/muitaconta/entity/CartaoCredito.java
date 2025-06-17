@@ -23,6 +23,10 @@ public class CartaoCredito {
 
     private Integer diaVencimentoFatura;
 
+    @ManyToOne
+    @JoinColumn(name = "id_user", referencedColumnName = "id_user")
+    private User user;
+
     @OneToMany(mappedBy = "cartaoCredito", cascade = CascadeType.ALL)
     private List<GastoCartao> gastos;
 
@@ -74,5 +78,13 @@ public class CartaoCredito {
 
     public void setGastos(List<GastoCartao> gastos) {
         this.gastos = gastos;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }

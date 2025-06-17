@@ -26,10 +26,6 @@ public class Emprestimo {
 
     private LocalDate dataFim;
 
-    @ManyToOne
-    @JoinColumn(name = "id_conta_bancaria")
-    private ContaBancaria contaBancaria;
-
     // Getter Setter
 
     public Long getId() {
@@ -86,13 +82,5 @@ public class Emprestimo {
 
     public void setDataFim(LocalDate dataFim) {
         this.dataFim = dataFim;
-    }
-
-    public ContaBancaria getContaBancaria() {
-        return contaBancaria;
-    }
-
-    public void setContaBancaria(ContaBancaria contaBancaria) {
-        this.contaBancaria = contaBancaria;
     }
 }

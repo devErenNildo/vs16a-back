@@ -28,7 +28,7 @@ public class TokenService {
         return TOKEN_PREFIX + " " +
                 Jwts.builder()
                         .setIssuer("vemser-api")
-                        .claim(Claims.ID, login.getId().toString())
+                        .claim(Claims.ID, login.getId())
                         .setIssuedAt(now)
                         .setExpiration(exp)
                         .signWith(SignatureAlgorithm.HS256, secret)

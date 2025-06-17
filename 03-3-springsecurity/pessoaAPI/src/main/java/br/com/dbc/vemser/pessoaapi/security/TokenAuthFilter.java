@@ -23,16 +23,18 @@ public class TokenAuthFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String tokenFromHeader = getTokenFromHeader(request);
 
-        UsernamePasswordAuthenticationToken usuario =
-                tokenService.isValid(tokenFromHeader);
+        if (tokenFromHeader != null) {
+            UsernamePasswordAuthenticationToken usuario =
+                    tokenService.isValid(tokenFromHeader);
 
-        SecurityContextHolder.getContext().setAuthentication(usuario);
+            SecurityContextHolder.getContext().setAuthentication(usuario);
+        }
 
         filterChain.doFilter(request, response);
 
     }
 
-    private String getTokenFromHeader(HttpServletRequest request) {
+    protected String getTokenFromHeader(HttpServletRequest request) {
         String token = request.getHeader("Authorization");
         if(token == null) {
             return null;

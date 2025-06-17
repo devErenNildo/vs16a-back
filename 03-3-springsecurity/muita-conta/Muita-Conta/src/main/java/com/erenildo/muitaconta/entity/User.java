@@ -20,6 +20,9 @@ public class User {
 
     private Boolean contaConfirmada = false;
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<CartaoCredito> cartoes;
+
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<ContaMensal> contasMensais;
 
@@ -94,5 +97,13 @@ public class User {
 
     public void setGastoAvulsos(List<GastoAvulso> gastoAvulsos) {
         this.gastoAvulsos = gastoAvulsos;
+    }
+
+    public List<CartaoCredito> getCartoes() {
+        return cartoes;
+    }
+
+    public void setCartoes(List<CartaoCredito> cartoes) {
+        this.cartoes = cartoes;
     }
 }
