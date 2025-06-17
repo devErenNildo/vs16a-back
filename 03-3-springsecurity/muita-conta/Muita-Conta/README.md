@@ -1,0 +1,20 @@
+| **Recurso**                 | **Método HTTP** | **ROLE\_ADMIN** | **Qualquer Usuário Autenticado** | **Público (Sem Login)** |
+| --------------------------- | --------------- | --------------- | -------------------------------- | ----------------------- |
+| `/auth/login`               | POST            | ✔️              | ✔️                               | ✔️                      |
+| `/auth/create`              | POST            | ✔️              | ✔️                               | ✔️                      |
+| `/auth/confirm`             | POST            | ✔️              | ✔️                               | ✔️                      |
+| `/admin/users`              | GET             | ✔️              | ❌                                | ❌                       |
+| `/admin/{idUser}`           | DELETE          | ✔️              | ❌                                | ❌                       |
+| `/cartao`                   | GET             | ✔️              | ✔️                               | ❌                       |
+| `/cartao`                   | POST            | ✔️              | ✔️                               | ❌                       |
+| `/cartao/{idCartao}`        | PUT             | ✔️              | ✔️                               | ❌                       |
+| `/cartao/{idCartao}`        | DELETE          | ✔️              | ✔️                               | ❌                       |
+| `/gastos/avulsos`           | GET             | ✔️              | ✔️                               | ❌                       |
+| `/gastos/avulsos`           | POST            | ✔️              | ✔️                               | ❌                       |
+| `/gastos/avulsos/{idGasto}` | DELETE          | ✔️              | ✔️                               | ❌                       |
+| `/gastos/cartao/{idCartao}` | POST            | ✔️              | ✔️                               | ❌                       |
+| `/gastos/cartao/{idCompra}` | PUT             | ✔️              | ✔️                               | ❌                       |
+| `/gastos/cartao/{idCartao}` | DELETE          | ✔️              | ✔️                               | ❌                       |
+| `/relatorio/mes`            | GET             | ✔️              | ✔️                               | ❌                       |
+| `/relatorio/cartao`         | GET             | ✔️              | ✔️                               | ❌                       |
+| `/relatorio/cartao/gastos`  | GET             | ✔️              | ✔️                               | ❌                       |
