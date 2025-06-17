@@ -1,20 +1,10 @@
-package com.erenildo.muitaconta.entity;
+package com.erenildo.muitaconta.dtos.cartao;
 
-import javax.persistence.*;
 import java.math.BigDecimal;
-import java.util.List;
 
-@Entity
-@Table(name = "tb_cartao_credito")
-public class CartaoCredito {
-
-    @Id
-    @Column(name = "id_cartao")
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_cartao_credito")
-    @SequenceGenerator(name = "seq_cartao_credito", sequenceName = "seq_cartao_credito", allocationSize = 1)
+public class ListagemCartaoResponseDTO {
     private Long id;
 
-    @Column(name = "nome_cartao")
     private String nome;
 
     private BigDecimal limite;
@@ -23,15 +13,19 @@ public class CartaoCredito {
 
     private Integer diaVencimentoFatura;
 
-    @ManyToOne
-    @JoinColumn(name = "id_user", referencedColumnName = "id_user")
-    private User user;
+    //Constructor
+    public ListagemCartaoResponseDTO() {
+    }
 
-    @OneToMany(mappedBy = "cartaoCredito", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<GastoCartao> gastos;
+    public ListagemCartaoResponseDTO(Long id, String nome, BigDecimal limite, Integer diaFechamentoFatura, Integer diaVencimentoFatura) {
+        this.id = id;
+        this.nome = nome;
+        this.limite = limite;
+        this.diaFechamentoFatura = diaFechamentoFatura;
+        this.diaVencimentoFatura = diaVencimentoFatura;
+    }
 
-    // Getter Setter
-
+    //Getter Setter
     public Long getId() {
         return id;
     }
@@ -70,21 +64,5 @@ public class CartaoCredito {
 
     public void setDiaVencimentoFatura(Integer diaVencimentoFatura) {
         this.diaVencimentoFatura = diaVencimentoFatura;
-    }
-
-    public List<GastoCartao> getGastos() {
-        return gastos;
-    }
-
-    public void setGastos(List<GastoCartao> gastos) {
-        this.gastos = gastos;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
     }
 }

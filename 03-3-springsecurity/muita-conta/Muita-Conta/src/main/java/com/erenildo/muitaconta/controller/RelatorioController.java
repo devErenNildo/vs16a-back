@@ -1,5 +1,6 @@
 package com.erenildo.muitaconta.controller;
 
+import com.erenildo.muitaconta.dtos.cartao.DetalheFaturaDTO;
 import com.erenildo.muitaconta.dtos.relatorios.RelatorioDividasMesDTO;
 import com.erenildo.muitaconta.service.RelatorioService;
 import org.springframework.http.ResponseEntity;
@@ -21,5 +22,13 @@ public class RelatorioController {
     @GetMapping("/mes")
     public ResponseEntity<RelatorioDividasMesDTO> relatorioDividasMes( @RequestParam(required = false) String competencia) throws Exception {
         return ResponseEntity.ok(relatorioService.getRelatorioPorMes(competencia));
+    }
+
+    @GetMapping("/cartao")
+    public ResponseEntity<DetalheFaturaDTO> relatorioFatura(
+            @RequestParam(required = false) Long idCartao,
+            @RequestParam(required = false) String competencia
+    ) throws Exception {
+        return ResponseEntity.ok(relatorioService.listarFaturaDoMes(idCartao, competencia));
     }
 }

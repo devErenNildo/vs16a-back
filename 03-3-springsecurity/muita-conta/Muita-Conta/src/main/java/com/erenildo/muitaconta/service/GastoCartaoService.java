@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.List;
@@ -66,13 +65,5 @@ public class GastoCartaoService {
 
         gasto.setParcelaCartao(parcelaCartao);
         gastoCartaoRepository.save(gasto);
-    }
-
-    private YearMonth calcularCompetencia(Integer diaFechamento, LocalDate dataCompra) {
-        if (dataCompra.getDayOfMonth() <= diaFechamento) {
-            return YearMonth.from(dataCompra).plusMonths(1);
-        } else {
-            return YearMonth.from(dataCompra).plusMonths(2);
-        }
     }
 }

@@ -1,38 +1,67 @@
 package com.erenildo.muitaconta.service;
 
+import com.erenildo.muitaconta.dtos.cartao.DetalheFaturaDTO;
+import com.erenildo.muitaconta.dtos.cartao.ItemFaturaDTO;
 import com.erenildo.muitaconta.dtos.relatorios.RelatorioDividasMesDTO;
+import com.erenildo.muitaconta.entity.CartaoCredito;
+import com.erenildo.muitaconta.entity.User;
+import com.erenildo.muitaconta.exceptions.RegraDeNegocioException;
+import com.erenildo.muitaconta.repository.CartaoCreditoRepository;
+import com.erenildo.muitaconta.repository.ParcelaCartaoRepository;
 import com.erenildo.muitaconta.repository.UserRepository;
-import com.erenildo.muitaconta.security.TokenService;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.YearMonth;
-import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 @Service
 public class RelatorioService {
 
     private final UserRepository userRepository;
     private final LoginService loginService;
+    private final ParcelaCartaoRepository parcelaCartaoRepository;
+    private final CartaoCreditoRepository cartaoCreditoRepository;
 
     public RelatorioService(
             UserRepository userRepository,
-            LoginService loginService
+            LoginService loginService,
+            ParcelaCartaoRepository parcelaCartaoRepository,
+            CartaoCreditoRepository cartaoCreditoRepository
     ) {
         this.userRepository = userRepository;
         this.loginService = loginService;
+        this.parcelaCartaoRepository = parcelaCartaoRepository;
+        this.cartaoCreditoRepository = cartaoCreditoRepository;
     }
 
-    public RelatorioDividasMesDTO getRelatorioMesAtual() throws Exception {
+    public DetalheFaturaDTO listarFaturaDoMes(Long idCartao, String competenciaStr) throws Exception {
+        User userCartao = loginService.buscarUserLogago();
 
-        String idUser = loginService.buscarUserLogago().getId();
-        LocalDate hoje = LocalDate.now();
-        LocalDate inicioDoMes = hoje.withDayOfMonth(1);
-        LocalDate fimDoMes = hoje.withDayOfMonth(hoje.lengthOfMonth());
-        YearMonth competencia = YearMonth.from(hoje);
+        if (idCartao != null) {
+            CartaoCredito cartaoCredito = cartaoCreditoRepository.findById(idCartao)
+                    .orElseThrow(() -> new RegraDeNegocioException("Cartão não encontrado"));
 
-        return userRepository.getRelatorioDividasMesAtual(idUser, competencia, inicioDoMes, fimDoMes);
+            if(!cartaoCredito.getUser().equals(userCartao))
+                throw new RegraDeNegocioException("Cartão não encontrado");
+        }
+
+        YearMonth competencia = (competenciaStr == null || competenciaStr.isBlank())
+                ? YearMonth.from(LocalDate.now())
+                : YearMonth.parse(competenciaStr);
+
+        List<ItemFaturaDTO> itens = parcelaCartaoRepository.buscarParcelasDaFatura(idCartao, competencia);
+
+
+        BigDecimal total = itens.stream()
+                .map(ItemFaturaDTO::getValorParcela)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        return new DetalheFaturaDTO(total, itens);
+
     }
+
 
     public RelatorioDividasMesDTO getRelatorioPorMes(String competenciaStr) throws Exception {
 

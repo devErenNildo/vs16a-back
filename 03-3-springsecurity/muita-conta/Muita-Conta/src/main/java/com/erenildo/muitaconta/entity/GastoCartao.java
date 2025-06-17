@@ -27,7 +27,7 @@ public class GastoCartao {
     @JoinColumn(name = "id_cartao")
     private CartaoCredito cartaoCredito;
 
-    @OneToMany(mappedBy = "gastoCartao", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "gastoCartao", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ParcelaCartao> parcelaCartao;
 
     // Getter Setter
