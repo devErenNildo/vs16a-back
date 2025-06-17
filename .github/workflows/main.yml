@@ -18,14 +18,8 @@ jobs:
         distribution: 'temurin'
 
     - name: Ir para o subdiretório do projeto
-      working-directory: ./03-01-spring-web/fake-bank
+      working-directory: ./03-3-springsecurity/muita-conta/Muita-Conta
       run: echo "Entrando no projeto fake-bank..."
-
-    - name: Criar arquivos RSA
-      working-directory: ./03-01-spring-web/fake-bank
-      run: |
-        echo -e "${{ secrets.RSA_PRIVATE_KEY }}" > src/main/resources/app.key
-        echo -e "${{ secrets.RSA_PUBLIC_KEY }}" > src/main/resources/app.pub
 
     - name: Build com Maven
       working-directory: ./03-01-spring-web/fake-bank
@@ -37,15 +31,16 @@ jobs:
         host: ${{ secrets.VPS_HOST }}
         username: ${{ secrets.VPS_USER }}
         key: ${{ secrets.SSH_PRIVATE_KEY }}
-        source: 03-01-spring-web/fake-bank/target/*.jar
-        target: /srv/http/api-fake-bank
+        source: /03-3-springsecurity/muita-conta/Muita-Conta/target/*.jar
+        target: /srv/http/api-muitaconta
+        # target: /srv/http/api-fake-bank
 
 
-    - name: SSH e reiniciar o serviço
-      uses: appleboy/ssh-action@master
-      with:
-        host: ${{ secrets.VPS_HOST }}
-        username: ${{ secrets.VPS_USER }}
-        key: ${{ secrets.SSH_PRIVATE_KEY }}
-        script: |
-          sudo systemctl restart fakebank-api.service
+    # - name: SSH e reiniciar o serviço
+    #   uses: appleboy/ssh-action@master
+    #   with:
+    #     host: ${{ secrets.VPS_HOST }}
+    #     username: ${{ secrets.VPS_USER }}
+    #     key: ${{ secrets.SSH_PRIVATE_KEY }}
+    #     script: |
+    #       sudo systemctl restart fakebank-api.service
