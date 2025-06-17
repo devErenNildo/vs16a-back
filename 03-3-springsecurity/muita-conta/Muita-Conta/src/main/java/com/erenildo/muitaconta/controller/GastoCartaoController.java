@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping("/gastos")
+@RequestMapping("/gastos/cartao")
 public class GastoCartaoController {
 
     private final GastoCartaoService gastoCartaoService;
@@ -18,7 +18,7 @@ public class GastoCartaoController {
         this.gastoCartaoService = gastoCartaoService;
     }
 
-    @PostMapping("cartao/{idCartao}")
+    @PostMapping("/{idCartao}")
     public String adicionarCompraParcelada(@PathVariable Long idCartao, @RequestBody @Valid  GastoCartaoRequestDTO dto) throws Exception {
         System.out.printf("Entrou");
         gastoCartaoService.adicionarCompraParcelada(idCartao, dto);
