@@ -37,27 +37,6 @@ public class GastoCartaoService {
         this.gastoCartaoRepository = gastoCartaoRepository;
     }
 
-    public void adicionarGastoCartao(Long idCartao, GastoCartaoRequestDTO dto) throws Exception {
-        CartaoCredito cartaoCredito = cartaoCreditoRepository.findById(idCartao)
-                .orElseThrow(() -> new RegraDeNegocioException("Cartão não encontrado, verifique os seus cartões"));
-
-        YearMonth competencias = calcularCompetencia(
-                cartaoCredito.getDiaFechamentoFatura(), dto.getDataCompra()
-        );
-
-        GastoCartao gasto = objectMapper.convertValue(dto, GastoCartao.class);
-        gasto.setCartaoCredito(cartaoCredito);
-
-        ParcelaCartao parcela = new ParcelaCartao();
-        parcela.setValorParcela(dto.getValor());
-        parcela.setCompetencia(competencias);
-        parcela.setGastoCartao(gasto);
-
-        gasto.setParcelaCartao(List.of(parcela));
-
-        gastoCartaoRepository.save(gasto);
-    }
-
     public void adicionarCompraParcelada(Long idCartao, GastoCartaoRequestDTO dto) throws Exception {
         CartaoCredito cartaoCredito = cartaoCreditoRepository.findById(idCartao)
                 .orElseThrow(() -> new RegraDeNegocioException("Cartão não encontrado, verifique os seus cartões"));
