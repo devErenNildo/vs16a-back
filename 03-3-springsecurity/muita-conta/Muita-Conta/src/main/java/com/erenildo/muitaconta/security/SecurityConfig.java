@@ -1,9 +1,7 @@
-package br.com.dbc.vemser.pessoaapi.security;
+package com.erenildo.muitaconta.security;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -18,10 +16,13 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 @EnableWebSecurity
-@RequiredArgsConstructor
 public class SecurityConfig {
 
     private final TokenService tokenService;
+
+    public SecurityConfig(TokenService tokenService) {
+        this.tokenService = tokenService;
+    }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http, TokenService tokenService) throws Exception {
@@ -29,11 +30,8 @@ public class SecurityConfig {
                 .cors().and()
                 .csrf().disable()
                 .authorizeHttpRequests((authz) -> authz
-                        .antMatchers("/auth", "/").permitAll()
-                        .antMatchers(HttpMethod.DELETE, "/pessoa/{id}").hasRole("ADMIN")
-                        .antMatchers("/contato/**").hasRole("ADMIN")
-                        .antMatchers("/endereco/**").hasAnyRole("ADMIN", "MARKETING")
-                        .antMatchers("/pet").hasRole("MARKETING")
+                        .antMatchers("/auth/**", "/").permitAll()
+                        .antMatchers("/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 );
         http.addFilterBefore(new TokenAuthFilter(tokenService), UsernamePasswordAuthenticationFilter.class);

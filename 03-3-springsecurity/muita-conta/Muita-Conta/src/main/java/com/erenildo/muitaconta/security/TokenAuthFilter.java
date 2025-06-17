@@ -1,6 +1,5 @@
-package br.com.dbc.vemser.pessoaapi.security;
+package com.erenildo.muitaconta.security;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
@@ -13,28 +12,28 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @Component
-@RequiredArgsConstructor
 public class TokenAuthFilter extends OncePerRequestFilter {
 
     private final TokenService tokenService;
 
+    public TokenAuthFilter(TokenService tokenService) {
+        this.tokenService = tokenService;
+    }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String tokenFromHeader = getTokenFromHeader(request);
 
-        if (tokenFromHeader != null) {
-            UsernamePasswordAuthenticationToken usuario =
-                    tokenService.isValid(tokenFromHeader);
+        UsernamePasswordAuthenticationToken usuario =
+                tokenService.isValid(tokenFromHeader);
 
-            SecurityContextHolder.getContext().setAuthentication(usuario);
-        }
+        SecurityContextHolder.getContext().setAuthentication(usuario);
 
         filterChain.doFilter(request, response);
 
     }
 
-    protected String getTokenFromHeader(HttpServletRequest request) {
+    private String getTokenFromHeader(HttpServletRequest request) {
         String token = request.getHeader("Authorization");
         if(token == null) {
             return null;
