@@ -76,6 +76,48 @@ public class GastoCartaoService {
         return new GastoCartaoResponseDTO("Compra adicionada com sucesso");
     }
 
+    public GastoCartaoResponseDTO editarCompra(Long idGasto, GastoCartaoRequestDTO dto) throws Exception {
+        User user = loginService.buscarUserLogago();
+
+        GastoCartao gastoAtual = gastoCartaoRepository.findById(idGasto)
+                .orElseThrow(() -> new RegraDeNegocioException("Compra não encontrada"));
+
+        if (!gastoAtual.getCartaoCredito().getUser().equals(user)) {
+            throw new RegraDeNegocioException("Compra não encontrada");
+        }
+
+        CartaoCredito cartaoCompra = gastoAtual.getCartaoCredito();
+
+        YearMonth competenciaPrimeiraParcela = cartaoCreditoService.calcularCompetenciaFatura(
+                dto.getDataCompra(), cartaoCompra.getDiaFechamentoFatura()
+        );
+
+        gastoAtual.getParcelaCartao().clear();
+
+        gastoAtual.setDescricao(dto.getDescricao());
+        gastoAtual.setValorTotal(dto.getValor());
+        gastoAtual.setQuantidadeParcelas(dto.getQuantidadeParcelas());
+        gastoAtual.setDataCompra(dto.getDataCompra());
+
+        BigDecimal valorParcela = dto.getValor().divide(BigDecimal.valueOf(dto.getQuantidadeParcelas()), 2, RoundingMode.HALF_UP);
+        List<ParcelaCartao> novasParcelas = new ArrayList<>();
+
+
+        for (int i = 0; i < dto.getQuantidadeParcelas(); i++) {
+            ParcelaCartao parcela = new ParcelaCartao();
+            parcela.setValorParcela(valorParcela);
+            parcela.setCompetencia(competenciaPrimeiraParcela.plusMonths(i));
+            parcela.setGastoCartao(gastoAtual);
+            novasParcelas.add(parcela);
+        }
+
+        gastoAtual.setParcelaCartao(novasParcelas);
+
+        gastoCartaoRepository.save(gastoAtual);
+
+        return new GastoCartaoResponseDTO("Compra editada com sucesso");
+    }
+
     public GastoCartaoResponseDTO apagarGasto(Long idGasto) throws Exception {
         User user = loginService.buscarUserLogago();
         GastoCartao gastoAtual = gastoCartaoRepository.findById(idGasto)

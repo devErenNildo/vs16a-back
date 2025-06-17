@@ -26,6 +26,11 @@ public class GastoCartaoController {
         return ResponseEntity.status(HttpStatus.CREATED).body(gastoCartaoService.adicionarCompraParcelada(idCartao, dto));
     }
 
+    @PutMapping("/{idCompra}")
+    public ResponseEntity<GastoCartaoResponseDTO> editarCompra(@PathVariable Long idCompra, @RequestBody @Valid GastoCartaoRequestDTO dto) throws Exception {
+        return ResponseEntity.ok(gastoCartaoService.editarCompra(idCompra, dto));
+    }
+
     @DeleteMapping("/{idCartao}")
     public ResponseEntity<GastoCartaoResponseDTO> apagarCompra(@PathVariable Long idCartao) throws Exception {
         return ResponseEntity.ok(gastoCartaoService.apagarGasto(idCartao));
