@@ -1,5 +1,6 @@
 package com.erenildo.muitaconta.security;
 
+import com.erenildo.muitaconta.entity.Cargo;
 import com.erenildo.muitaconta.entity.Login;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 
 @Service
 public class TokenService {
@@ -25,10 +27,16 @@ public class TokenService {
     public String generateToken(Login login) {
         Date now = new Date();
         Date exp = new Date(now.getTime() + Long.parseLong(expiration));
+
+        List<String> cargos = login.getCargos().stream()
+                .map(Cargo::getAuthority)
+                .toList();
+
         return TOKEN_PREFIX + " " +
                 Jwts.builder()
                         .setIssuer("vemser-api")
                         .claim(Claims.ID, login.getId())
+                        .claim("cargos", cargos)
                         .setIssuedAt(now)
                         .setExpiration(exp)
                         .signWith(SignatureAlgorithm.HS256, secret)

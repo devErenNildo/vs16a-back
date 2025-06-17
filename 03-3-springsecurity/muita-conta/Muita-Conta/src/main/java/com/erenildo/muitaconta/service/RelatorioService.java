@@ -2,13 +2,19 @@ package com.erenildo.muitaconta.service;
 
 import com.erenildo.muitaconta.dtos.cartao.DetalheFaturaDTO;
 import com.erenildo.muitaconta.dtos.cartao.ItemFaturaDTO;
+import com.erenildo.muitaconta.dtos.gastos.GastoCartaoResponseDTO;
 import com.erenildo.muitaconta.dtos.relatorios.RelatorioDividasMesDTO;
 import com.erenildo.muitaconta.entity.CartaoCredito;
 import com.erenildo.muitaconta.entity.User;
 import com.erenildo.muitaconta.exceptions.RegraDeNegocioException;
 import com.erenildo.muitaconta.repository.CartaoCreditoRepository;
+import com.erenildo.muitaconta.repository.GastoCartaoRepository;
 import com.erenildo.muitaconta.repository.ParcelaCartaoRepository;
 import com.erenildo.muitaconta.repository.UserRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -23,17 +29,20 @@ public class RelatorioService {
     private final LoginService loginService;
     private final ParcelaCartaoRepository parcelaCartaoRepository;
     private final CartaoCreditoRepository cartaoCreditoRepository;
+    private final GastoCartaoRepository gastoCartaoRepository;
 
     public RelatorioService(
             UserRepository userRepository,
             LoginService loginService,
             ParcelaCartaoRepository parcelaCartaoRepository,
-            CartaoCreditoRepository cartaoCreditoRepository
+            CartaoCreditoRepository cartaoCreditoRepository,
+            GastoCartaoRepository gastoCartaoRepository
     ) {
         this.userRepository = userRepository;
         this.loginService = loginService;
         this.parcelaCartaoRepository = parcelaCartaoRepository;
         this.cartaoCreditoRepository = cartaoCreditoRepository;
+        this.gastoCartaoRepository = gastoCartaoRepository;
     }
 
     public DetalheFaturaDTO listarFaturaDoMes(Long idCartao, String competenciaStr) throws Exception {
@@ -79,5 +88,10 @@ public class RelatorioService {
         LocalDate fimDoMes = competencia.atEndOfMonth();
 
         return userRepository.getRelatorioDividasMesAtual(idUser, competencia, inicioDoMes, fimDoMes);
+    }
+
+    public Page<GastoCartaoResponseDTO> listarGastos(Integer page, Integer size, Long idCartao){
+        Pageable pageable = PageRequest.of(page, size, Sort.by("dataCompra").descending());
+        return gastoCartaoRepository.listarGastosCartao(idCartao, pageable);
     }
 }

@@ -26,6 +26,8 @@ public class GastoAvulsoService {
         this.objectMapper = objectMapper;
     }
 
+
+
     public GastosAvulsosResponseDTO adicionarGastos(GastosAvulsosRequestDTO dto) throws Exception {
         User user = loginService.buscarUserLogago();
 
